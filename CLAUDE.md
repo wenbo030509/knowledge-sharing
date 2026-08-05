@@ -335,16 +335,19 @@ knowledge-sharing/
 │   ├── Claude Code、OpenClaw 与 Agent Runtime.md ← 专题：Agent Runtime 本质关系
 │   └── AI Agent 时代的几个核心认知与行业判断.md ← 专题：行业认知
 │
-├── projects/                          ← 按项目独立记录
-│   ├── README.md                      ← 项目索引
-│   ├── cot-compressed-evalset.md       ← CoT 质检项目（核心面试故事）
-│   ├── baidu-agent-migration.md        ← 百度物料迁移 Agent
-│   └── fourth-paradigm-maas.md         ← 第四范式航空机务 MaaS
+├── projects/                          ← 按项目独立记录（状态见项目索引）
+│   ├── README.md                      ← 项目索引（含状态标记）
+│   ├── cot-compressed-evalset.md      ← CoT 质检项目（核心面试故事，主线）
+│   ├── vlm-multivideo-data-production.md ← VLM 多视频数据生产（主线，进行中）
+│   ├── baidu-agent-migration.md       ← 百度物料迁移 Agent（历史项目）
+│   ├── fourth-paradigm-maas.md        ← 第四范式航空机务 MaaS（历史项目）
+│   ├── price-agent.md                 ← Price-Agent 商品对比助手（自驱项目）
+│   └── kaggle-talkingdata.md          ← Kaggle 广告欺诈检测（数据能力佐证）
 │
 ├── interview-prep/                    ← 面试准备
 │   ├── gap-analysis.md                ← 岗位差距分析 + 弥补计划
-│   ├── resume.md                      ← 简历当前版本（待创建）
-│   ├── story-bank.md                  ← 面试故事库（待创建）
+│   ├── resume.md                      ← 简历当前版本（v2 已完成）
+│   ├── story-bank.md                  ← 面试故事库（已完成）
 │   ├── agent-insights.md              ← Agent 产品使用笔记（待创建）
 │   └── mock-interviews.md             ← 模拟面试记录（待创建）
 │
@@ -428,4 +431,4 @@ knowledge-sharing/
 
 ---
 
-**最后更新：2026-07-27**
+**最后更新：2026-08-05**
