@@ -339,7 +339,7 @@ knowledge-sharing/
 │   ├── README.md                      ← 项目索引
 │   ├── cot-compressed-evalset.md       ← CoT 质检项目（核心面试故事）
 │   ├── baidu-agent-migration.md        ← 百度物料迁移 Agent
-│   └── xingzhi-finetuning.md           ← 行至 LoRA 微调
+│   └── fourth-paradigm-maas.md         ← 第四范式航空机务 MaaS
 │
 ├── interview-prep/                    ← 面试准备
 │   ├── gap-analysis.md                ← 岗位差距分析 + 弥补计划
