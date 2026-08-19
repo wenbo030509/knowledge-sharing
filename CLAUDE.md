@@ -327,13 +327,16 @@ knowledge-sharing/
 │   └── YYYY-MM-DD-study.md            ← 面试备战日记录
 │
 ├── notebook/                          ← 学习资料与指南
-│   ├── knowledge-tree.md              ← 知识树（持续生长）
+│   ├── 0.knowledge-tree.md            ← 知识树（持续生长）
 │   ├── learning-manifesto.md          ← 学习宪法（10 条原则）
 │   ├── python-learning-guide.md       ← Python 学习指南（30 关键词 + 四层架构）
 │   ├── pandas-csv-excel-guide.md      ← 结构化数据处理指南（4 大核心操作）
-│   ├── Workflow vs Agent.md           ← 专题：Workflow 与 Agent 概念梳理
-│   ├── Claude Code、OpenClaw 与 Agent Runtime.md ← 专题：Agent Runtime 本质关系
-│   └── AI Agent 时代的几个核心认知与行业判断.md ← 专题：行业认知
+│   ├── LLM 数据集全景：预训练、后训练、评测集与 Benchmark.md ← 专题：数据集全景
+│   ├── Agent Harness 解剖.md          ← 专题：Agent Harness 八层解剖
+│   ├── Workflow vs Agent：概念梳理与工程实践.md ← 专题：Workflow 与 Agent
+│   ├── Claude Code、OpenClaw 与 Agent Runtime 的本质关系.md ← 专题：Agent Runtime
+│   ├── AI Agent 时代的几个核心认知与行业判断.md ← 专题：行业认知
+│   └── 美团技术视频专题：评测、训练数据与记忆三条学习路线.md ← 专题：美团视频学习路线
 │
 ├── projects/                          ← 按项目独立记录（状态见项目索引）
 │   ├── README.md                      ← 项目索引（含状态标记）
@@ -341,7 +344,8 @@ knowledge-sharing/
 │   ├── vlm-multivideo-data-production.md ← VLM 多视频数据生产（主线，进行中）
 │   ├── baidu-agent-migration.md       ← 百度物料迁移 Agent（历史项目）
 │   ├── fourth-paradigm-maas.md        ← 第四范式航空机务 MaaS（历史项目）
-│   ├── price-agent.md                 ← Price-Agent 商品对比助手（自驱项目）
+│   ├── price-agent-project-readme.md  ← Price-Agent 商品对比助手（自驱项目，真实项目文档 + 面试故事）
+│   ├── price-agent-复盘文档.md        ← Price-Agent 面试弹药库（演示逐字稿 + 面试问答 + 专题附录）
 │   └── kaggle-talkingdata.md          ← Kaggle 广告欺诈检测（数据能力佐证）
 │
 ├── interview-prep/                    ← 面试准备

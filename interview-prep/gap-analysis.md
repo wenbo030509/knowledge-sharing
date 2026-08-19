@@ -454,5 +454,7 @@ Week 3-6：项目二启动（和项目一并行，但项目一优先）
 ⬜ 面试故事库整理
 ⬜ MinHash 原理学习
 ⬜ DuckDB 学习
+⬜ Spark 学习
+⬜ mapreduce 学习
 ⬜ Pretrain/SFT/RL 数据需求系统学习
 ```
