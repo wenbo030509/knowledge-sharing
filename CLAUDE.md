@@ -334,7 +334,10 @@ knowledge-sharing/
 │   ├── Workflow vs Agent：概念梳理与工程实践.md ← 专题：Workflow 与 Agent
 │   ├── Claude Code、OpenClaw 与 Agent Runtime 的本质关系.md ← 专题：Agent Runtime
 │   ├── AI Agent 时代的几个核心认知与行业判断.md ← 专题：行业认知
-│   └── 美团技术视频专题：评测、训练数据与记忆三条学习路线.md ← 专题：美团视频学习路线
+│   ├── 美团技术视频专题：评测、训练数据与记忆三条学习路线.md ← 专题：美团视频学习路线
+│   ├── vlm任务2评分标准rubric整理分析.md ← 专题：VLM 判分规范解剖（5 部件框架 + 工程层判分五模式）
+│   ├── VLM 评测基准地图：MMMU、MME、Video-MME 与 MMBench.md ← 专题：VLM 评测基准八层解剖
+│   └── Reward Model 八层解剖：偏好建模、Bradley-Terry 与 reward hacking.md ← 专题：Reward Model 八层解剖
 │
 ├── projects/                          ← 按项目独立记录（状态见项目索引）
 │   ├── README.md                      ← 项目索引（含状态标记）
