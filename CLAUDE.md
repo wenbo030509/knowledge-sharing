@@ -320,6 +320,7 @@ P2：加分项
 knowledge-sharing/
 ├── README.md                          ← 项目门户
 ├── CLAUDE.md                          ← 本文件：秋招备战规范
+├── .claude/skills/                    ← 可复用技能（wechat-article：公众号文章抓取）
 │
 ├── daily/                             ← 每日记录
 │   ├── template.md                    ← 模板
@@ -331,6 +332,7 @@ knowledge-sharing/
 │   ├── learning-manifesto.md          ← 学习宪法（10 条原则）
 │   ├── python-learning-guide.md       ← Python 学习指南（30 关键词 + 四层架构）
 │   ├── pandas-csv-excel-guide.md      ← 结构化数据处理指南（4 大核心操作）
+│   ├── 精读拆解方法论：事实-过程-方法三层法.md ← 学习方法论（每次精读对照执行）
 │   ├── LLM 数据集全景：预训练、后训练、评测集与 Benchmark.md ← 专题：数据集全景
 │   ├── Agent Harness 解剖.md          ← 专题：Agent Harness 八层解剖
 │   ├── Workflow vs Agent：概念梳理与工程实践.md ← 专题：Workflow 与 Agent
@@ -360,10 +362,22 @@ knowledge-sharing/
 │   │   ├── 原文.md                    ← 英文原文
 │   │   ├── 译文.md                    ← 中文翻译
 │   │   └── 笔记.md                    ← 精读笔记（10 观点 + 3 故事）
-│   └── 02/                            ← 待添加
+│   ├── 02.meituan-agent-evals/        ← 美团 Agent 评测（与 Anthropic 对比阅读）
+│   │   ├── 原文.md                    ← 文章原文（中文）
+│   │   └── 笔记.md                    ← 精读笔记（12 观点 + 重合/差异对比）
+│   ├── 03.aihot-real-world-agent-evals/ ← 真实业务场景评测（行业数据 + 三文交叉验证）
+│   │   ├── 原文.md                    ← 文章原文（中文）
+│   │   └── 笔记.md                    ← 精读笔记（RealReplicaBench + Anthropic/美团对照）
+│   ├── 04.swe-bench-anatomy/          ← SWE-bench 八层解剖（benchmark 事实标准）
+│   │   └── 笔记.md                    ← 解剖（构建管线/判分/演进史/污染教训 + 面试故事）
+│   ├── 05.llm-judge-reliability/      ← LLM Judge 可靠性（Judge bias + 一致性统计）
+│   │   └── 笔记.md                    ← 三大偏差/缓解/Cohen's Kappa 校准 + 质检连接
+│   └── 06.eval-to-training-loop/      ← 评测→训练闭环（P0 收官：数据飞轮闭合）
+│       └── 笔记.md                    ← SWE-smith + 行业闭环 + 岗位身份锚定
 │
 └── src/                               ← 工具脚本
-    └── html_to_md.py                  ← HTML 转 Markdown 工具
+    ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
+    └── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
 ```
 
 ### Daily 文档规范

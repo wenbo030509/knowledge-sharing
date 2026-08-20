@@ -16,6 +16,7 @@
   - `learning-manifesto.md` — 学习宣言：10 条核心原则
   - `python-learning-guide.md` — Python 学习指南（30 关键词 + 四层架构）
   - `pandas-csv-excel-guide.md` — 结构化数据处理指南（读取列/新增列/保存/批量）
+  - `精读拆解方法论：事实-过程-方法三层法.md` — 学习拆解框架（每篇精读必用）
   - 专题文章：Workflow vs Agent、Agent Runtime、行业认知
 - 📅 `daily/` — 每日学习记录：工作汇报 + 技术解剖 + 面试故事 + 知识树生长
 - 📁 `projects/` — 项目文档：每个项目独立记录，持续填充
@@ -108,13 +109,26 @@ knowledge-sharing/
 │   └── gap-analysis.md                ← 岗位差距分析 + 弥补计划（执行手册）
 │
 ├── papers/                            ← 论文与外部资料精读
-│   └── 01.anthropic-agent-evals/      ← Anthropic Agent 评测方法论
-│       ├── 原文.md                    ← 英文原文
-│       ├── 译文.md                    ← 中文翻译
-│       └── 笔记.md                    ← 精读笔记（10 观点 + 3 故事）
+│   ├── 01.anthropic-agent-evals/      ← Anthropic Agent 评测方法论
+│   │   ├── 原文.md                    ← 英文原文
+│   │   ├── 译文.md                    ← 中文翻译
+│   │   └── 笔记.md                    ← 精读笔记（10 观点 + 3 故事）
+│   ├── 02.meituan-agent-evals/        ← 美团 Agent 评测（工业界落地视角）
+│   │   ├── 原文.md                    ← 文章原文（中文）
+│   │   └── 笔记.md                    ← 精读笔记（12 观点 + Anthropic 对比）
+│   ├── 03.aihot-real-world-agent-evals/ ← 真实业务场景评测（行业数据）
+│   │   ├── 原文.md                    ← 文章原文（中文）
+│   │   └── 笔记.md                    ← 精读笔记（RealReplicaBench 数据 + 三文交叉验证）
+│   ├── 04.swe-bench-anatomy/          ← SWE-bench 八层解剖（benchmark 事实标准）
+│   │   └── 笔记.md                    ← 八层解剖（构建管线/判分机制/演进史/污染教训）
+│   ├── 05.llm-judge-reliability/      ← LLM Judge 可靠性（偏差 + 一致性统计）
+│   │   └── 笔记.md                    ← 三大偏差/缓解机制/Cohen's Kappa 校准流程
+│   └── 06.eval-to-training-loop/      ← 评测→训练闭环（数据飞轮闭合）
+│       └── 笔记.md                    ← SWE-smith 合成数据管线 + 行业闭环模式
 │
 └── src/                               ← 工具脚本
-    └── html_to_md.py                  ← HTML 转 Markdown 工具
+    ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
+    └── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
 ```
 
 ---
