@@ -1,4 +1,4 @@
-# CoT Compressed 数据交付
+# CoT Compressed 数据交付-学科与推理
 
 > 项目周期：2026-06 ~ 2026-07（3 周）
 >
