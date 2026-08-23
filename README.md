@@ -72,7 +72,11 @@ knowledge-sharing/
 │   ├── pandas-csv-excel-guide.md      ← 结构化数据处理指南（4 大核心操作）
 │   ├── Workflow vs Agent：概念梳理与工程实践.md
 │   ├── Claude Code、OpenClaw 与 Agent Runtime 的本质关系.md
-│   └── AI Agent 时代的几个核心认知与行业判断.md
+│   ├── AI Agent 时代的几个核心认知与行业判断.md
+│   ├── 搜索系统全景：召回、排序、评测与数据闭环.md ← 搜索方向地图
+│   ├── 搜索工程到Agent的迁移地图.md ← 工业项目 → Agent 构建/评测方法论
+│   ├── VLM训练演进与数据难度升级.md ← VLM 演进史 + 数据难度定位
+│   └── VLM课程规划：多模态大模型的训练历程与发展.md ← VLM 课程大纲 + 自动化提效路线
 │
 ├── projects/                          ← 按项目独立记录
 │   ├── README.md                      ← 项目索引
@@ -98,8 +102,11 @@ knowledge-sharing/
 │   │   └── 笔记.md                    ← 八层解剖（构建管线/判分机制/演进史/污染教训）
 │   ├── 05.llm-judge-reliability/      ← LLM Judge 可靠性（偏差 + 一致性统计）
 │   │   └── 笔记.md                    ← 三大偏差/缓解机制/Cohen's Kappa 校准流程
-│   └── 06.eval-to-training-loop/      ← 评测→训练闭环（数据飞轮闭合）
-│       └── 笔记.md                    ← SWE-smith 合成数据管线 + 行业闭环模式
+│   ├── 06.eval-to-training-loop/      ← 评测→训练闭环（数据飞轮闭合）
+│   │   └── 笔记.md                    ← SWE-smith 合成数据管线 + 行业闭环模式
+│   └── 07.meituan-search-llm-repr/    ← 美团搜索 LLM 语义表征（与 price-agent 对标）
+│       ├── 原文.md                    ← 文章原文（中文）
+│       └── 笔记.md                    ← 三期实践 + price-agent 对比 + 面试故事
 │
 └── src/                               ← 工具脚本
     ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）

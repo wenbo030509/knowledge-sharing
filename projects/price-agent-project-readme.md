@@ -665,7 +665,7 @@ Decision / Recommendation
 
 - **意图分类准确率量化**：规则路由的设计逻辑清楚，但没有留存准确率和错误分布，面试不能报数
 - **α=0.7 敏感性**：只有单点测试集结论，没做 α 扫描曲线，对结果的敏感范围未知
-- **评测统计显著性**：分层评测缺样本量与置信区间，结论是趋势性而非显著性
+- **评测统计显著性**：分层评测缺样本量与置信区间，结论是趋势性而非显著性 → 方案已设计（[评测增强方案](price-agent-eval-upgrade.md) 动作 1：AA 校验 baseline 双跑，量化波动带）
 - **LLM-as-Judge 可靠性验证**：与 4 维度启发式评分的交叉校验做了设计，缺一致性数据（如 Cohen's Kappa）
 
 ### 工程视角待补
@@ -678,6 +678,7 @@ Decision / Recommendation
 ### 面试视角待补
 
 - **对标公司产品**：与传统比价产品（如什么值得买）的差异点梳理——AI 意图理解 vs 精确输入
+- **语义信号从召回 → 排序**：美团搜索 3.0 三期实践（papers/07）的核心启示——语义相似度作为排序特征（分桶注入 / PEPNet 门控）+ Query 覆盖率统计，M4 Rerank 落地时对标
 - **Claude Code 架构启发**：复盘文档附录八已整理，需消化成自己的 Agent 架构判断
 - **Agent 评测行业前沿**：Anthropic Agent Evals 方法论与本项目分层评测的连接（papers/ 已有精读）
 
@@ -687,4 +688,6 @@ Decision / Recommendation
 
 - [价格 Agent 复盘文档](price-agent-复盘文档.md) — 面试弹药库：演示逐字稿（Part 0-5）+ 面试官问答 Q1-Q27 + 快手/字节/Agent 基础/LLM-as-Judge/机务 RAG/意图识别/Claude Code 七个专题附录（内容保持原样，仅索引）
 - [GitHub 仓库](https://github.com/wenbo030509)（price-agent）— 代码、roadmap、模块设计文档
+- [美团搜索 3.0：LLM 语义表征精读](../papers/07.meituan-search-llm-repr/笔记.md) — 工业级对标：语义信号从召回 → 排序特征的三期路径（难负样本 / 覆盖率 / 分桶门控注入），含 MVP vs 工业级差距表
+- [评测增强方案](price-agent-eval-upgrade.md) — 立即可做动作包：AA 校验（baseline 双跑）+ pass@k 指标体系 + 语义 Gap 困难集 + 覆盖率统计
 
