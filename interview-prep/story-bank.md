@@ -65,7 +65,7 @@
 | 预训练数据工程师（PM 方向） | ① CoT 质检 Pipeline | ② VLM 多视频 + ⑥ Kaggle + ⑦ 第四范式教训 |
 | 通用 Agent 数据 PM | ② VLM 多视频 | ① CoT 质检 + ③ 百度 + ④ 第四范式 |
 | Agent 产品经理 | ③ 百度 Agent | ⑤ Price-Agent + ④ 第四范式 + ② VLM |
-| AI 数据运营 | ① CoT 质检 | ② VLM + ⑥ Kaggle |
+| LLM 数据与评测工程师 | ① CoT 质检 | ② VLM + ⑥ Kaggle |
 
 ---
 

@@ -13,8 +13,8 @@
 
 | 维度 | 内容 |
 |------|------|
-| 学习方向 | Agent 产品经理 / 预训练数据工程师（PM 方向）/ 通用 Agent 数据 PM |
-| 当前身份 | 字节跳动 AI 数据运营实习生 |
+| 学习方向 | 评测驱动的 Agent/策略产品经理（🔴 主攻）/ 预训练数据工程师 PM 方向（🟡 备选） |
+| 当前身份 | 字节跳动 LLM 数据与评测工程师（实习） |
 | 学习定位 | 独立设计端到端数据质量 Pipeline + 理解 Learnability + 跨团队协作 |
 
 ### 学习输出公式
@@ -59,7 +59,7 @@ Agent 认知：深度使用体验 + 对 Agent 能力边界的判断 + 前沿动�
 
 AI Data Pipeline 实践者，当前在字节跳动实习。职业目标：
 
-> **Agent 产品经理。** 站在数据策略和模型能力的交叉点上，通过设计高质量数据生产管线和评测体系，系统性提升模型在真实场景中的 Agent 能力。
+> **评测驱动的 Agent/策略产品经理。** 站在数据策略和模型能力的交叉点上，通过设计高质量数据生产管线和评测体系，系统性提升模型在真实场景中的 Agent 能力。
 
 ---
 
@@ -335,14 +335,21 @@ knowledge-sharing/
 │   ├── Claude Code、OpenClaw 与 Agent Runtime 的本质关系.md ← 专题：Agent Runtime
 │   ├── AI Agent 时代的几个核心认知与行业判断.md ← 专题：行业认知
 │   ├── 美团技术视频专题：评测、训练数据与记忆三条学习路线.md ← 专题：美团视频学习路线
+│   ├── 搜索系统全景：召回、排序、评测与数据闭环.md ← 专题：搜索方向地图（Search 节点骨架）
+│   ├── 搜索工程到Agent的迁移地图.md ← 专题：工业项目 → Agent 构建/评测的取长补短方法论
+│   ├── VLM训练演进与数据难度升级.md ← 专题：VLM 演进史 + 我们的数据在演进线中的位置
+│   ├── VLM课程规划：多模态大模型的训练历程与发展.md ← 课程规划：6 模块大纲 + 自动化提效路线图
 │   ├── vlm任务2评分标准rubric整理分析.md ← 专题：VLM 判分规范解剖（5 部件框架 + 工程层判分五模式）
 │   ├── VLM 评测基准地图：MMMU、MME、Video-MME 与 MMBench.md ← 专题：VLM 评测基准八层解剖
-│   └── Reward Model 八层解剖：偏好建模、Bradley-Terry 与 reward hacking.md ← 专题：Reward Model 八层解剖
+│   ├── Reward Model 八层解剖：偏好建模、Bradley-Terry 与 reward hacking.md ← 专题：Reward Model 八层解剖
+│   ├── AI策略产品与评测能力地图.md ← 专题：评测四层模型 + 评测×数据交叉定位（职业主线）
+│   └── 算法反馈迭代：从评测结果到数据策略.md ← 专题：闭环能力补齐（数据进训练/评测反馈/验证方法/算法语言）
 │
 ├── projects/                          ← 按项目独立记录（状态见项目索引）
 │   ├── README.md                      ← 项目索引（含状态标记）
 │   ├── cot-compressed-evalset.md      ← CoT 质检项目（核心讲述故事，主线）
 │   ├── vlm-multivideo-data-production.md ← VLM 多视频数据生产（主线，进行中）
+│   ├── vlm-eval-feedback-loop.md      ← VLM 评测反馈闭环（工作工具：归因模板 + 策略反馈框架 + 验证记录表）
 │   ├── baidu-agent-migration.md       ← 百度物料迁移 Agent（历史项目）
 │   ├── fourth-paradigm-maas.md        ← 第四范式航空机务 MaaS（历史项目）
 │   ├── price-agent-project-readme.md  ← Price-Agent 商品对比助手（自驱项目，真实项目文档 + 讲述故事）
@@ -371,8 +378,11 @@ knowledge-sharing/
 │   │   └── 笔记.md                    ← 解剖（构建管线/判分/演进史/污染教训 + 讲述故事）
 │   ├── 05.llm-judge-reliability/      ← LLM Judge 可靠性（Judge bias + 一致性统计）
 │   │   └── 笔记.md                    ← 三大偏差/缓解/Cohen's Kappa 校准 + 质检连接
-│   └── 06.eval-to-training-loop/      ← 评测→训练闭环（P0 收官：数据飞轮闭合）
-│       └── 笔记.md                    ← SWE-smith + 行业闭环 + 学习方向锚定
+│   ├── 06.eval-to-training-loop/      ← 评测→训练闭环（P0 收官：数据飞轮闭合）
+│   │   └── 笔记.md                    ← SWE-smith + 行业闭环 + 学习方向锚定
+│   └── 07.meituan-search-llm-repr/    ← 美团搜索 LLM 语义表征（price-agent 工业级对标）
+│       ├── 原文.md                    ← 文章原文（中文）
+│       └── 笔记.md                    ← 三期实践 + MVP vs 工业级对比 + 面试故事
 │
 └── src/                               ← 工具脚本
     ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
