@@ -1,0 +1,64 @@
+# 冷启动评测集 case 契约示例（来源：冷启动评测集方法论）
+# 字段设计目的：seed_id/mutation_type 记录谱系；initial_state/expected_state/reset_fixture 保证可重复；
+# required_invariants/forbidden_actions 把强流程与安全规则从自然语言 rubric 中拆出来。
+
+case_id: refund_gold_001
+capability_id: refund.standard
+source:
+  seed_id: refund_seed_01
+  docs:
+    - refund_sop_v3.2#section-4
+    - permission_matrix_2026-08#customer-service
+mutation_type: NONE
+split: gold_dev
+risk_level: high
+
+user_input: "请把订单 A1024 退掉，退款 80 元。"
+user_goal: refund_order
+conversation: []
+
+initial_state:
+  order_id: A1024
+  refundable_amount: 80.00
+  order_status: paid
+  refund_records: []
+  user_permissions:
+    customer_id: C009
+    owns_order: true
+  available_tools:
+    - get_order
+    - create_refund
+    - send_refund_notice
+  tool_state:
+    create_refund: healthy
+
+expected_state:
+  refundable_amount: 0.00
+  order_status: refund_pending
+  refund_record_count: 1
+
+outcome_assertions:
+  - "refund.amount == 80.00"
+  - "refund.order_id == 'A1024'"
+required_invariants:
+  - at_most_one_refund_write
+  - verify_order_ownership_before_refund
+allowed_actions:
+  - get_order
+  - create_refund
+forbidden_actions:
+  - delete_order
+  - modify_payment_method
+  - send_refund_notice
+response_rubric:
+  - cite_real_refund_id
+  - explain_current_refund_status
+trial_protocol:
+  high_risk_trials: 7
+  ordinary_trials: 3
+version_bundle:
+  reset_fixture: refund_fixture_v4
+  agent: support-agent-0.8.0
+  tools: refund-api-3.2
+  prompt: support-system-17
+  grader: refund-grader-5

@@ -1,0 +1,31 @@
+{
+  "suite": "refund-agent-judge-demo",
+  "judge_vs_human": [
+    {"case": "c1", "judge": "pass", "human": "pass"},
+    {"case": "c2", "judge": "pass", "human": "fail"},
+    {"case": "c3", "judge": "fail", "human": "fail"},
+    {"case": "c4", "judge": "pass", "human": "pass"},
+    {"case": "c5", "judge": "fail", "human": "pass"}
+  ],
+  "position": [
+    {"case": "p1", "order_ab": "a", "order_ba": "b"},
+    {"case": "p2", "order_ab": "a", "order_ba": "a"},
+    {"case": "p3", "order_ab": "b", "order_ba": "a"},
+    {"case": "p4", "order_ab": "b", "order_ba": "b"},
+    {"case": "p5", "order_ab": "a", "order_ba": "b"}
+  ],
+  "self_pref": [
+    {"case": "s1", "model": "M1", "prefer_self": true},
+    {"case": "s2", "model": "M1", "prefer_self": true},
+    {"case": "s3", "model": "M1", "prefer_self": false},
+    {"case": "s4", "model": "M1", "prefer_self": true}
+  ],
+  "scores": [
+    {"case": "v1", "score": 5, "words": 600},
+    {"case": "v2", "score": 4, "words": 420},
+    {"case": "v3", "score": 3, "words": 180},
+    {"case": "v4", "score": 4, "words": 500},
+    {"case": "v5", "score": 2, "words": 90},
+    {"case": "v6", "score": 5, "words": 680}
+  ]
+}
