@@ -343,7 +343,8 @@ knowledge-sharing/
 │   ├── VLM 评测基准地图：MMMU、MME、Video-MME 与 MMBench.md ← 专题：VLM 评测基准八层解剖
 │   ├── Reward Model 八层解剖：偏好建模、Bradley-Terry 与 reward hacking.md ← 专题：Reward Model 八层解剖
 │   ├── AI策略产品与评测能力地图.md ← 专题：评测四层模型 + 评测×数据交叉定位（职业主线）
-│   └── 算法反馈迭代：从评测结果到数据策略.md ← 专题：闭环能力补齐（数据进训练/评测反馈/验证方法/算法语言）
+│   ├── 算法反馈迭代：从评测结果到数据策略.md ← 专题：闭环能力补齐（数据进训练/评测反馈/验证方法/算法语言）
+│   └── AI 数据策略：从 AiMe 到 B 端 Agent 平台.md ← 专题：数据策略五问（采什么/从哪采/怎么用/怎么验证/优先级）+ 入口作为数据生产系统 + B 端应用
 │
 ├── projects/                          ← 按项目独立记录（状态见项目索引）
 │   ├── README.md                      ← 项目索引（含状态标记）
@@ -380,9 +381,28 @@ knowledge-sharing/
 │   │   └── 笔记.md                    ← 三大偏差/缓解/Cohen's Kappa 校准 + 质检连接
 │   ├── 06.eval-to-training-loop/      ← 评测→训练闭环（P0 收官：数据飞轮闭合）
 │   │   └── 笔记.md                    ← SWE-smith + 行业闭环 + 学习方向锚定
-│   └── 07.meituan-search-llm-repr/    ← 美团搜索 LLM 语义表征（price-agent 工业级对标）
+│   ├── 07.meituan-search-llm-repr/    ← 美团搜索 LLM 语义表征（price-agent 工业级对标）
 │       ├── 原文.md                    ← 文章原文（中文）
 │       └── 笔记.md                    ← 三期实践 + MVP vs 工业级对比 + 面试故事
+│   ├── 08.xiaohongshu-algorithm-role-definition/ ← 算法岗位的定义与理解（小红书）
+│   │   ├── 原文.md                    ← 正文 + 11 张图片内容
+│   │   ├── 笔记.md                    ← 岗位认知 + 面试故事
+│   │   └── images/                    ← 11 张原图
+│   ├── 09.xiaohongshu-llm-engineer-notes/ ← LLM 算法工程师手记（小红书）
+│       ├── 原文.md                    ← 正文（6 条手记）
+│       └── 笔记.md                    ← bench/agentic data/reward hacking
+│   ├── 10.brench-cold-start-agent-eval/ ← 无线上数据构建 Agent 冷启动评测集（Brench）
+│   │   ├── 原文.md                    ← 13 节构建方法
+│   │   ├── 笔记.md                    ← 冷启动评测集 + 面试故事
+│   │   └── images/                    ← 18 张原图
+│   ├── 11.xiaohongshu-from-zero-eval/ ← 从零做评测两份推荐材料（Anthropic + Harbor）
+│   │   ├── 原文.md                    ← 两篇材料完整梳理
+│   │   ├── 笔记.md                    ← 评测五件套 + 任务落地
+│   │   └── images/                    ← 14 张原图
+│   └── 12.warren-optima-benchmark/  ← AA 发布 Optima：把业务场景做成 Benchmark（Warren）
+│       ├── 原文.md                    ← 正文 + 8 张卡片
+│       ├── 笔记.md                    ← 双层评测 + 选型三维 + 评测资产化
+│       └── images/                    ← 8 张原图
 │
 └── src/                               ← 工具脚本
     ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
@@ -458,4 +478,4 @@ knowledge-sharing/
 
 ---
 
-**最后更新：2026-08-20**
+**最后更新：2026-08-24**
