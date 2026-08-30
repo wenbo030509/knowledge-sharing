@@ -1,0 +1,3 @@
+interface:
+  display_name: "小红书知识提取"
+  short_description: "提取小红书帖子正文与图片文字，OCR 兜底 + 多模态整理"
