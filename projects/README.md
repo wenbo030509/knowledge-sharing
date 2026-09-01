@@ -2,7 +2,7 @@
 
 > 按项目独立记录，持续填充。每个项目一个文件，记录背景、技术解剖、知识连接、面试故事。
 >
-> 更新：2026-08-05（简历 v2 对齐：新增 VLM / 第四范式 / Price-Agent / Kaggle）
+> 更新：2026-09-01（新增 VLM 评测反馈闭环 / Price-Agent 评测增强方案两个项目文件入索引）
 
 ---
 
@@ -13,10 +13,13 @@
 | 字节 · CoT 质检 Pipeline | `cot-compressed-evalset.md` | 🟢 已交付，持续深挖 | 2026-06 ~ 07 | 实习经历 · 字节 ① |
 | 字节 · VLM 多视频数据生产（设计层） | `vlm-multivideo-data-production.md` | 🟢 进行中 | 2026-08 ~ | 实习经历 · 字节 ② |
 | 字节 · VLM 标注执行与交付（执行层） | `vlm-annotation-delivery.md` | 🟢 进行中（认知提炼中） | 2026-08 ~ | 实习经历 · 字节 ② |
+| 字节 · VLM 靶向 SFT 训练管线复盘（消费层） | `vlm-sft-pipeline-review.md` | 🟢 进行中（技术提炼中） | 2026-08 ~ | 实习经历 · 字节 ② |
+| 字节 · VLM 评测反馈闭环（工作工具） | `vlm-eval-feedback-loop.md` | 🟢 工作工具（在用） | 2026-08 ~ | 实习经历 · 字节 ② |
 | 百度 · 一键百看投放 Agent | `baidu-agent-migration.md` | 🟡 历史项目，故事可用 | 2025.08 ~ 2026.04 | 实习经历 · 百度 |
 | 第四范式 · 航空机务 MaaS | `fourth-paradigm-maas.md` | 🟡 历史项目，故事可用 | 2024.10 ~ 2025.02 | 实习经历 · 第四范式 |
 | 第四范式 · 军事 Multi-Agents（Manus 方向） | `fourth-paradigm-multi-agents.md` | 🟡 历史项目，暂不深入 | 2025.03 ~ 2025.08 | 实习经历 · 第四范式 |
 | Price-Agent · 商品对比助手 | `price-agent-project-readme.md` + `price-agent-复盘文档.md` | 🟡 自驱项目，故事可用 | 持续维护 | 项目经历 |
+| Price-Agent · 评测增强方案 | `price-agent-eval-upgrade.md` | 📋 方案待执行 | 2026-08-21 | 项目经历 |
 | Kaggle · 广告欺诈检测 | `kaggle-talkingdata.md` | 🟢 已完成 | — | 项目经历 |
 
 ---
