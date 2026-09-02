@@ -81,8 +81,17 @@ knowledge-sharing/
 ├── projects/                          ← 按项目独立记录
 │   ├── README.md                      ← 项目索引
 │   ├── cot-compressed-evalset.md       ← CoT 质检项目（核心讲述故事）
+│   ├── vlm-multivideo-data-production.md ← VLM 多视频数据生产（设计层）
+│   ├── vlm-annotation-delivery.md      ← VLM 数据生产（执行层，端到端负责）
+│   ├── vlm-sft-pipeline-review.md      ← VLM 靶向 SFT 管线复盘（消费层）
+│   ├── vlm-eval-feedback-loop.md       ← VLM 评测反馈闭环（工作工具）
 │   ├── baidu-agent-migration.md        ← 百度物料迁移 Agent
-│   └── fourth-paradigm-maas.md         ← 第四范式航空机务 MaaS
+│   ├── fourth-paradigm-maas.md         ← 第四范式航空机务 MaaS
+│   ├── fourth-paradigm-multi-agents.md ← 第四范式军事 Multi-Agents
+│   ├── price-agent-project-readme.md   ← Price-Agent 商品对比助手
+│   ├── price-agent-复盘文档.md         ← Price-Agent 讲述弹药库
+│   ├── price-agent-eval-upgrade.md     ← Price-Agent 评测增强方案
+│   └── kaggle-talkingdata.md           ← Kaggle 广告欺诈检测
 │
 ├── interview-prep/                    ← 面试准备
 │   └── gap-analysis.md                ← 岗位差距分析 + 弥补计划（执行手册）
