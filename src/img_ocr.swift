@@ -3,7 +3,7 @@ import Vision
 import AppKit
 
 guard CommandLine.arguments.count > 1 else {
-    FileHandle.standardError.write("usage: xhs_ocr <image-path> [<image-path> ...]\n".data(using: .utf8)!)
+    FileHandle.standardError.write("usage: img_ocr <image-path> [<image-path> ...]\n".data(using: .utf8)!)
     exit(1)
 }
 

@@ -17,10 +17,11 @@ import json
 import os
 import re
 import ssl
-import subprocess
 import sys
 import urllib.request
 from datetime import datetime
+
+from img_ocr import ocr_images
 
 
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -81,34 +82,13 @@ def download_images(note, outdir):
     return paths
 
 
-def vision_ocr(paths):
-    # 优先使用编译好的 Vision OCR 工具
-    tool = os.path.join(os.path.dirname(__file__), "xhs_ocr")
-    if not os.path.exists(tool):
-        src = os.path.join(os.path.dirname(__file__), "xhs_ocr.swift")
-        subprocess.run(["swiftc", "-O", src, "-o", tool], check=False)
-    if not os.path.exists(tool):
-        return None
-    out = subprocess.run([tool] + paths, capture_output=True, text=True).stdout
-    return out
-
-
-def tesseract_ocr(paths):
-    chunks = []
-    for p in paths:
-        r = subprocess.run(
-            ["tesseract", p, "stdout", "-l", "chi_sim+eng", "--psm", "6"],
-            capture_output=True, text=True)
-        chunks.append(f"=== {os.path.basename(p)} ===\n{r.stdout.strip()}")
-    return "\n\n".join(chunks)
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("url")
     ap.add_argument("--out", default="xhs_download")
     ap.add_argument("--ocr", action="store_true")
-    ap.add_argument("--ocr-engine", choices=["vision", "tesseract"], default="vision")
+    # model=视觉模型 API（默认，结构还原最好，失败自动回退 vision→tesseract）
+    ap.add_argument("--ocr-engine", choices=["model", "vision", "tesseract"], default="model")
     args = ap.parse_args()
 
     final = resolve(args.url)
@@ -120,13 +100,8 @@ def main():
     paths = download_images(note, args.out)
     ocr_text = ""
     if args.ocr and paths:
-        if args.ocr_engine == "vision":
-            text = vision_ocr(paths)
-            if text is None:
-                text = tesseract_ocr(paths)
-        else:
-            text = tesseract_ocr(paths)
-        ocr_text = text
+        # OCR 编排在共享模块 img_ocr.py（vision 失败自动回退 tesseract）
+        ocr_text = ocr_images(paths, engine=args.ocr_engine)
 
     # 把结果统一落盘，供多模态收尾层使用
     outdir = os.path.abspath(args.out)

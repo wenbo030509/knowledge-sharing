@@ -2,4 +2,4 @@
 .claude/settings.local.json
 interview-prep/
 __pycache__/
-src/xhs_ocr
+src/img_ocr
