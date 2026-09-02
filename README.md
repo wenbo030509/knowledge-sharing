@@ -22,7 +22,6 @@
 -  `projects/` — 项目文档：每个项目独立记录，持续填充
 -  `interview-prep/` — 面试准备：差距分析、简历、故事库、模拟面试（已 gitignore，不入库）
 -  `papers/` — 论文与外部资料精读笔记（12 篇，评测方法论为主线）
--  `agent-eval-kit/` — Agent 评测方法论与可运行工具（论文/知识树的工程化产出）
 -  `src/` — 工具脚本（文章抓取、HTML 转 MD、小红书 OCR、简历生成）
 
 ---
@@ -154,18 +153,12 @@ knowledge-sharing/
 │       ├── 笔记.md                    ← 双层评测 + 选型三维 + 评测资产化
 │       └── images/                    ← 8 张原图
 │
-├── src/                               ← 工具脚本
-│   ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
-│   ├── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
-│   ├── xhs_fetch.py                   ← 小红书链接抓取（xiaohongshu-knowledge 技能用）
-│   ├── xhs_ocr.swift                  ← 小红书图片 OCR（macOS Vision，确定性兜底）
-│   └── build_resume_docx.py           ← 从 resume.md 生成 docx 简历（脚本内路径为旧 macOS 环境）
-│
-└── agent-eval-kit/                    ← Agent 评测方法论与可运行工具（论文/知识树的工程化产出）
-    ├── README.md                      ← 定位、内容结构、快速使用、路线图
-    ├── docs/                          ← 评测四层模型 + Benchmark 设计 Playbook
-    ├── scripts/                       ← eval_report.py（pass@k/AA/Kappa）/ benchmark_planner.py / judge_calibrator.py
-    └── examples/                      ← case 契约 + 统计/生成/校准输入示例
+└── src/                               ← 工具脚本
+    ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
+    ├── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
+    ├── xhs_fetch.py                   ← 小红书链接抓取（xiaohongshu-knowledge 技能用）
+    ├── xhs_ocr.swift                  ← 小红书图片 OCR（macOS Vision，确定性兜底）
+    └── build_resume_docx.py           ← 从 resume.md 生成 docx 简历（脚本内路径为旧 macOS 环境）
 ```
 
 ---

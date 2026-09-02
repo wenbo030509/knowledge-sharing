@@ -410,18 +410,12 @@ knowledge-sharing/
 │       ├── 笔记.md                    ← 双层评测 + 选型三维 + 评测资产化
 │       └── images/                    ← 8 张原图
 │
-├── src/                               ← 工具脚本
-│   ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
-│   ├── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
-│   ├── xhs_fetch.py                   ← 小红书链接抓取（xiaohongshu-knowledge 技能用）
-│   ├── xhs_ocr.swift                  ← 小红书图片 OCR（macOS Vision，确定性兜底）
-│   └── build_resume_docx.py           ← 从 resume.md 生成 docx 简历（注：脚本内路径为旧 macOS 环境）
-│
-└── agent-eval-kit/                    ← Agent 评测方法论与可运行工具（论文/知识树的工程化产出）
-    ├── README.md                      ← 定位、内容结构、快速使用、路线图
-    ├── docs/                          ← 评测四层模型 + Benchmark 设计 Playbook
-    ├── scripts/                       ← eval_report.py（pass@k/AA/Kappa）/ benchmark_planner.py / judge_calibrator.py
-    └── examples/                      ← case 契约 + 统计/生成/校准输入示例
+└── src/                               ← 工具脚本
+    ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
+    ├── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
+    ├── xhs_fetch.py                   ← 小红书链接抓取（xiaohongshu-knowledge 技能用）
+    ├── xhs_ocr.swift                  ← 小红书图片 OCR（macOS Vision，确定性兜底）
+    └── build_resume_docx.py           ← 从 resume.md 生成 docx 简历（注：脚本内路径为旧 macOS 环境）
 ```
 
 ### Daily 文档规范
@@ -493,4 +487,4 @@ knowledge-sharing/
 
 ---
 
-**最后更新：2026-09-02**（文档索引对齐实际文件：补 agent-eval-kit、xiaohongshu-knowledge 技能、src 脚本、papers/07 InfoNCE 解剖；interview-prep 已 gitignore 不入库，索引保留完整清单并标注）
+**最后更新：2026-09-02**（删除 agent-eval-kit 目录：toy 工具、缺真实数据与业务支撑，评测能力改由真实项目落地补充；同步移除 CLAUDE.md/README.md 中的相关索引。此前同日已对齐 xiaohongshu-knowledge 技能、src 脚本、papers/07 InfoNCE 解剖；interview-prep 已 gitignore 不入库，索引保留完整清单并标注）
