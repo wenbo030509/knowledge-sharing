@@ -316,7 +316,7 @@ P2：加分项
 knowledge-sharing/
 ├── README.md                          ← 项目门户
 ├── CLAUDE.md                          ← 本文件：知识学习规范
-├── .claude/skills/                    ← 可复用技能（wechat-article：公众号文章抓取）
+├── .claude/skills/                    ← 可复用技能（wechat-article：公众号抓取；xiaohongshu-knowledge：小红书正文+图片 OCR 提取）
 │
 ├── daily/                             ← 每日记录
 │   ├── template.md                    ← 模板
@@ -344,7 +344,8 @@ knowledge-sharing/
 │   ├── Reward Model 八层解剖：偏好建模、Bradley-Terry 与 reward hacking.md ← 专题：Reward Model 八层解剖
 │   ├── AI策略产品与评测能力地图.md ← 专题：评测四层模型 + 评测×数据交叉定位（职业主线）
 │   ├── 算法反馈迭代：从评测结果到数据策略.md ← 专题：闭环能力补齐（数据进训练/评测反馈/验证方法/算法语言）
-│   └── AI 数据策略：从 AiMe 到 B 端 Agent 平台.md ← 专题：数据策略五问（采什么/从哪采/怎么用/怎么验证/优先级）+ 入口作为数据生产系统 + B 端应用
+│   ├── AI 数据策略：从 AiMe 到 B 端 Agent 平台.md ← 专题：数据策略五问（采什么/从哪采/怎么用/怎么验证/优先级）+ 入口作为数据生产系统 + B 端应用
+│   └── AI 数据策略 PM 工作闭环：从评测驱动到数据构造与合成.md ← 专题：策略 PM 工作闭环（驱动/发现/落实）+ 数据构造 vs 合成（四谱系/verifier/五风险）
 │
 ├── projects/                          ← 按项目独立记录（状态见项目索引）
 │   ├── README.md                      ← 项目索引（含状态标记）
@@ -361,7 +362,7 @@ knowledge-sharing/
 │   ├── price-agent-eval-upgrade.md    ← Price-Agent 评测增强方案（📋 方案待执行）
 │   └── kaggle-talkingdata.md          ← Kaggle 广告欺诈检测（数据能力佐证）
 │
-├── interview-prep/                    ← 面试准备
+├── interview-prep/                    ← 面试准备（已 gitignore，不入库；本地完整）
 │   ├── gap-analysis.md                ← 岗位差距分析 + 弥补计划
 │   ├── resume.md                      ← 简历当前版本（v2 已完成）
 │   ├── story-bank.md                  ← 故事库（已完成）
@@ -387,7 +388,8 @@ knowledge-sharing/
 │   │   └── 笔记.md                    ← SWE-smith + 行业闭环 + 学习方向锚定
 │   ├── 07.meituan-search-llm-repr/    ← 美团搜索 LLM 语义表征（price-agent 工业级对标）
 │       ├── 原文.md                    ← 文章原文（中文）
-│       └── 笔记.md                    ← 三期实践 + MVP vs 工业级对比 + 面试故事
+│       ├── 笔记.md                    ← 三期实践 + MVP vs 工业级对比 + 面试故事
+│       └── 解剖-InfoNCE与Triplet对比学习.md ← 对比学习双损失八层解剖
 │   ├── 08.xiaohongshu-algorithm-role-definition/ ← 算法岗位的定义与理解（小红书）
 │   │   ├── 原文.md                    ← 正文 + 11 张图片内容
 │   │   ├── 笔记.md                    ← 岗位认知 + 面试故事
@@ -408,9 +410,18 @@ knowledge-sharing/
 │       ├── 笔记.md                    ← 双层评测 + 选型三维 + 评测资产化
 │       └── images/                    ← 8 张原图
 │
-└── src/                               ← 工具脚本
-    ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
-    └── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
+├── src/                               ← 工具脚本
+│   ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
+│   ├── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
+│   ├── xhs_fetch.py                   ← 小红书链接抓取（xiaohongshu-knowledge 技能用）
+│   ├── xhs_ocr.swift                  ← 小红书图片 OCR（macOS Vision，确定性兜底）
+│   └── build_resume_docx.py           ← 从 resume.md 生成 docx 简历（注：脚本内路径为旧 macOS 环境）
+│
+└── agent-eval-kit/                    ← Agent 评测方法论与可运行工具（论文/知识树的工程化产出）
+    ├── README.md                      ← 定位、内容结构、快速使用、路线图
+    ├── docs/                          ← 评测四层模型 + Benchmark 设计 Playbook
+    ├── scripts/                       ← eval_report.py（pass@k/AA/Kappa）/ benchmark_planner.py / judge_calibrator.py
+    └── examples/                      ← case 契约 + 统计/生成/校准输入示例
 ```
 
 ### Daily 文档规范
@@ -482,4 +493,4 @@ knowledge-sharing/
 
 ---
 
-**最后更新：2026-09-01**
+**最后更新：2026-09-02**（文档索引对齐实际文件：补 agent-eval-kit、xiaohongshu-knowledge 技能、src 脚本、papers/07 InfoNCE 解剖；interview-prep 已 gitignore 不入库，索引保留完整清单并标注）

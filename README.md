@@ -10,17 +10,20 @@
 一套以学习 模型训练、模型评测、Agent应用及相关技术为目标的系统化学习体系。
 
 -  `CLAUDE.md` — Claude 行为规范：知识学习目标 + 四视角思维框架 + 执行流程
+-  `.claude/skills/` — 可复用技能（wechat-article：公众号抓取；xiaohongshu-knowledge：小红书正文+图片 OCR 提取）
 -  `notebook/` — 学习资料与指南
   - `0.knowledge-tree.md` — 知识树：AI Learning System 的完整骨架
   - `learning-manifesto.md` — 学习宣言：10 条核心原则
   - `python-learning-guide.md` — Python 学习指南（30 关键词 + 四层架构）
   - `pandas-csv-excel-guide.md` — 结构化数据处理指南（读取列/新增列/保存/批量）
   - `精读拆解方法论：事实-过程-方法三层法.md` — 学习拆解框架（每篇精读必用）
-  - 专题文章：Workflow vs Agent、Agent Runtime、行业认知
+  - 专题文章：Agent（Harness/Workflow/Runtime/行业认知）、评测与数据策略（评测能力地图/算法反馈迭代/数据策略/Reward Model/LLM 数据集全景）、VLM（训练演进/课程规划/评测基准/判分规范）、搜索（系统全景/迁移地图）
 -  `daily/` — 每日学习记录：工作汇报 + 技术解剖 + 讲述故事 + 知识树生长
 -  `projects/` — 项目文档：每个项目独立记录，持续填充
--  `interview-prep/` — 面试准备：差距分析、简历、故事库、模拟面试
--  `papers/` — 论文与外部资料精读笔记
+-  `interview-prep/` — 面试准备：差距分析、简历、故事库、模拟面试（已 gitignore，不入库）
+-  `papers/` — 论文与外部资料精读笔记（12 篇，评测方法论为主线）
+-  `agent-eval-kit/` — Agent 评测方法论与可运行工具（论文/知识树的工程化产出）
+-  `src/` — 工具脚本（文章抓取、HTML 转 MD、小红书 OCR、简历生成）
 
 ---
 
@@ -66,17 +69,27 @@ knowledge-sharing/
 │   └── 2026-07-11-study.md            ← 首个学习日：Information Bottleneck + Cascading Classification
 │
 ├── notebook/                          ← 学习资料与指南
-│   ├── knowledge-tree.md              ← AI Learning System 知识树（持续生长）
+│   ├── 0.knowledge-tree.md            ← AI Learning System 知识树（持续生长）
 │   ├── learning-manifesto.md          ← 学习宣言（10 条原则）
 │   ├── python-learning-guide.md       ← Python 学习指南（30 关键词 + 四层架构）
 │   ├── pandas-csv-excel-guide.md      ← 结构化数据处理指南（4 大核心操作）
+│   ├── 精读拆解方法论：事实-过程-方法三层法.md ← 学习拆解框架
+│   ├── LLM 数据集全景：预训练、后训练、评测集与 Benchmark.md ← 数据集全景
+│   ├── Agent Harness 解剖.md          ← Agent Harness 八层解剖
 │   ├── Workflow vs Agent：概念梳理与工程实践.md
 │   ├── Claude Code、OpenClaw 与 Agent Runtime 的本质关系.md
 │   ├── AI Agent 时代的几个核心认知与行业判断.md
+│   ├── 美团技术视频专题：评测、训练数据与记忆三条学习路线.md
 │   ├── 搜索系统全景：召回、排序、评测与数据闭环.md ← 搜索方向地图
 │   ├── 搜索工程到Agent的迁移地图.md ← 工业项目 → Agent 构建/评测方法论
 │   ├── VLM训练演进与数据难度升级.md ← VLM 演进史 + 数据难度定位
-│   └── VLM课程规划：多模态大模型的训练历程与发展.md ← VLM 课程大纲 + 自动化提效路线
+│   ├── VLM课程规划：多模态大模型的训练历程与发展.md ← VLM 课程大纲 + 自动化提效路线
+│   ├── vlm任务2评分标准rubric整理分析.md ← VLM 判分规范解剖
+│   ├── VLM 评测基准地图：MMMU、MME、Video-MME 与 MMBench.md ← VLM 评测基准
+│   ├── Reward Model 八层解剖：偏好建模、Bradley-Terry 与 reward hacking.md
+│   ├── AI策略产品与评测能力地图.md ← 评测四层模型 + 评测×数据交叉定位
+│   ├── 算法反馈迭代：从评测结果到数据策略.md ← 评测→数据策略闭环
+│   └── AI 数据策略：从 AiMe 到 B 端 Agent 平台.md ← 数据策略五问
 │
 ├── projects/                          ← 按项目独立记录
 │   ├── README.md                      ← 项目索引
@@ -93,8 +106,12 @@ knowledge-sharing/
 │   ├── price-agent-eval-upgrade.md     ← Price-Agent 评测增强方案
 │   └── kaggle-talkingdata.md           ← Kaggle 广告欺诈检测
 │
-├── interview-prep/                    ← 面试准备
-│   └── gap-analysis.md                ← 岗位差距分析 + 弥补计划（执行手册）
+├── interview-prep/                    ← 面试准备（已 gitignore，不入库；本地完整）
+│   ├── gap-analysis.md                ← 岗位差距分析 + 弥补计划（执行手册）
+│   ├── resume.md                      ← 简历当前版本（v2 已完成）
+│   ├── story-bank.md                  ← 故事库（已完成）
+│   ├── agent-insights.md              ← Agent 产品使用笔记（待创建）
+│   └── mock-interviews.md             ← 模拟面试记录（待创建）
 │
 ├── papers/                            ← 论文与外部资料精读
 │   ├── 01.anthropic-agent-evals/      ← Anthropic Agent 评测方法论
@@ -115,7 +132,8 @@ knowledge-sharing/
 │   │   └── 笔记.md                    ← SWE-smith 合成数据管线 + 行业闭环模式
 │   ├── 07.meituan-search-llm-repr/    ← 美团搜索 LLM 语义表征（与 price-agent 对标）
 │       ├── 原文.md                    ← 文章原文（中文）
-│       └── 笔记.md                    ← 三期实践 + price-agent 对比 + 面试故事
+│       ├── 笔记.md                    ← 三期实践 + price-agent 对比 + 面试故事
+│       └── 解剖-InfoNCE与Triplet对比学习.md ← 对比学习双损失八层解剖
 │   ├── 08.xiaohongshu-algorithm-role-definition/ ← 算法岗位的定义与理解（小红书）
 │   │   ├── 原文.md                    ← 正文 + 11 张图片内容
 │   │   ├── 笔记.md                    ← 岗位认知 + 面试故事
@@ -136,9 +154,18 @@ knowledge-sharing/
 │       ├── 笔记.md                    ← 双层评测 + 选型三维 + 评测资产化
 │       └── images/                    ← 8 张原图
 │
-└── src/                               ← 工具脚本
-    ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
-    └── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
+├── src/                               ← 工具脚本
+│   ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
+│   ├── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
+│   ├── xhs_fetch.py                   ← 小红书链接抓取（xiaohongshu-knowledge 技能用）
+│   ├── xhs_ocr.swift                  ← 小红书图片 OCR（macOS Vision，确定性兜底）
+│   └── build_resume_docx.py           ← 从 resume.md 生成 docx 简历（脚本内路径为旧 macOS 环境）
+│
+└── agent-eval-kit/                    ← Agent 评测方法论与可运行工具（论文/知识树的工程化产出）
+    ├── README.md                      ← 定位、内容结构、快速使用、路线图
+    ├── docs/                          ← 评测四层模型 + Benchmark 设计 Playbook
+    ├── scripts/                       ← eval_report.py（pass@k/AA/Kappa）/ benchmark_planner.py / judge_calibrator.py
+    └── examples/                      ← case 契约 + 统计/生成/校准输入示例
 ```
 
 ---
