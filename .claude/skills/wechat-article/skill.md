@@ -1,6 +1,6 @@
 ---
 name: wechat-article
-description: 抓取并提取微信公众号（mp.weixin.qq.com）文章正文与图片内容为 Markdown，按知识库规范落盘。当用户分享微信文章链接并要求总结/记录/精读时使用。注意 WebFetch 对微信域名会被安全策略拦截，必须走 curl + 提取脚本链路；图片内容复用 src/img_ocr.py 共享 OCR 模块。
+description: 抓取并提取微信公众号（mp.weixin.qq.com）文章正文与图片内容为 Markdown，按知识库规范落盘。当用户分享微信文章链接并要求总结/记录/精读时使用。注意 WebFetch 对微信域名会被安全策略拦截，必须走 curl + 提取脚本链路；图片由脚本保序下载后，当前会话的多模态 agent 直接看图判断与文章相关性（相关保留并转写、无关舍弃），脚本 OCR（src/img_ocr.py）仅作无视觉会话时的兜底。
 ---
 
 # 微信公众号文章处理
@@ -15,75 +15,96 @@ WebFetch(mp.weixin.qq.com)  → ❌ 被 claude.ai 域名安全策略拦截（"Un
 html_to_md.py                → ❌ 只认 <article> 标签，微信文章没有，不要用
 src/wechat_article.py        → ✅ 专为微信结构写的正文提取脚本（正文在 div#js_content，
                               图片 data-src 懒加载，域名 qpic.cn）
-src/wechat_images.py         → ✅ 文章图片下载 + OCR（表格/幻灯片图里的内容必须走这步，
-                              复用 xiaohongshu-knowledge 的共享 OCR 模块 src/img_ocr.py）
+src/wechat_images.py         → ✅ 文章图片保序下载到本地（识图交给当前会话的多模态 agent；
+                              可选 --ocr 走共享模块 src/img_ocr.py 做脚本兜底，仅无视觉会话时用）
 ```
 
 ## 标准流程
 
-### 第 1 步：抓取 HTML
+> **跨平台命令约定**（本 skill 在不同设备/OS 上被调起，下方命令按你的环境适配，不要照抄）：
+> - `python3` → Windows 上通常是 `python`；先确认哪个可用（`python --version`）。
+> - 脚本网络层已用纯标准库（`src/net_util.py`），**无需 requests**；只有 `wechat_article.py` 的
+>   HTML 解析依赖 `beautifulsoup4`，缺失时脚本会提示 `python -m pip install beautifulsoup4`。
+> - `/tmp/xxx` → 非类 Unix 环境用系统临时目录（Windows PowerShell: `$env:TEMP`）。
+> - `curl` → **Windows PowerShell 里 `curl` 是 `Invoke-WebRequest` 的别名，不认 `-sL`**，
+>   必须用 `curl.exe`；**更省事的做法：直接 `python wechat_article.py <url>` 让脚本自己抓**
+>   （net_util 跨平台，自动处理 UA/gzip/证书，无需手动 curl）。
+> - 路径分隔与引号按当前 shell 语法处理；含中文/空格的路径加引号。
+
+### 第 1 步：抓取 + 提取正文（推荐一步到位）
+
+脚本网络层跨平台（net_util，自动处理浏览器 UA / gzip / 证书降级），**直接让脚本抓取即可**：
 
 ```bash
-curl -sL -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" "<文章URL>" -o /tmp/wechat_article.html
+python3 src/wechat_article.py "<文章URL>" -o /tmp/wechat_article.md
 ```
 
-必须带浏览器 UA，否则微信可能返回验证页。输出到 `/tmp/` 即可（临时文件）。
+脚本会自动：抓取 HTML → 提取标题（`h1#activity-name`）、正文（`div#js_content`）、转表格为 Markdown、保留图片链接（懒加载 `data-src`）、剔除噪音（"点亮星标"/"推荐阅读"/"END" 等）。
 
-### 第 2 步：提取正文
-
-```bash
-python3 src/wechat_article.py -f /tmp/wechat_article.html -o /tmp/wechat_article.md
-```
-
-脚本会自动：提取标题（`h1#activity-name`）、正文（`div#js_content`）、转表格为 Markdown、保留图片链接（懒加载 `data-src`）、剔除噪音（"点亮星标"/"推荐阅读"/"END" 等）。
+**备选（脚本抓取被风控/需要手动介入时）**：先手动抓 HTML 再喂给脚本处理本地文件——
+`curl.exe -sL -A "<浏览器UA>" "<文章URL>" -o /tmp/wechat_article.html`，再
+`python3 src/wechat_article.py -f /tmp/wechat_article.html -o /tmp/wechat_article.md`。
+（⚠️ WebFetch 对 mp.weixin.qq.com 必被安全策略拦截，不要用；Windows 上 `curl` 是别名，用 `curl.exe`。）
 
 **失败排查：**
 - 报错"未能提取到标题"→ 页面是验证页/文章已删除/需要登录，告知用户，不要硬编
 - 提取结果没有图片链接 → 文章图片可能是纯装饰 gif，正常
 
-### 第 3 步：图片识别（复用 xiaohongshu-knowledge 的两层识图能力）★
+### 第 2 步：图片识别（主路径：agent 直接看图；脚本 OCR 仅兜底）★
 
 **先判断是否要走**：md 里出现 qpic.cn 链接且可能是内容载体 → 走本步；只有装饰 gif/无图 → 跳过。
 
-微信编辑器里**表格、幻灯片、长截图常以图片形式存在——图片里的字就是内容**，且 qpic 链接带时效参数。所以内容性图片必须：下载到本地 → 识别（模型优先，本地兜底）→ 看图转写。和 xiaohongshu-knowledge 同一套两层模式。
+微信编辑器里**表格、幻灯片、长截图常以图片形式存在——图片里的字就是内容**，且 qpic 链接带时效参数。所以内容性图片必须：下载到本地 → 识别 → 转写进正文。
 
-**第一层：确定性兜底（脚本，可复现）**
+> **为什么主路径是"agent 看图"而不是"脚本 OCR"（跨设备/跨 agent 的关键）**：
+> 本 skill 会被不同设备、不同 agent runtime 调起。脚本 OCR 的 model 引擎依赖宿主注入
+> `ANTHROPIC_*` 环境变量、本地回退依赖 macOS `swiftc` / `tesseract`——这些在异构环境
+> （不同厂商 key、非 Claude Code runtime、Windows/Linux）**都不保证存在**，一旦缺失就静默降级到空。
+> 而"当前会话的 agent 本身就是多模态模型"这个能力，是**任何视觉 agent 都自带**的，零配置、跨平台。
+> 所以：**下载靠脚本（确定性），识图靠 agent（普适性）**——这是本 skill 跨设备可用的设计根基。
+
+**第一层（主）：下载图片 → agent 用 Read 逐张看图转写**
+
+先用脚本把图片保序下载到本地（只下载、不 OCR）：
+
+```bash
+python3 src/wechat_images.py /tmp/wechat_article.md \
+  --out /tmp/wechat_work --rewrite-out /tmp/wechat_article.local.md
+```
+
+产物（`/tmp/wechat_work/`）：
+- `images/img_00.jpg ...` — 保序下载的图片（与文章出现顺序一致；qpic 防盗链已处理）
+- `wechat_article.local.md` — 图片链接改写为 `images/img_XX.jpg` 本地路径的 md（下载失败的图保留原链接）
+
+然后**你（当前会话的多模态模型）用 Read 逐张读 `images/img_XX.jpg`**，对每一张做两件事——这是主识别方式，不依赖任何外部 API/OCR 环境：
+- **判断与文章的相关性**（视觉判断，别只看有没有字）：
+  - **无关图 → 舍弃**：纯装饰背景/logo/二维码/表情包/风景/公众号引导图，无有效文字且与主题无关 → 不转写、不进 `images/`，交付时用一句话说明已舍弃（不静默丢失）。
+  - **有效图 → 保留**：表格图、幻灯片截图、笔记截图、带文字说明的图、与主题相关的示意图 → 保留并转写。
+- **对保留的图忠实转写**：表格图 → Markdown 表格（行列不错位）；流程图 → 用 `→` 还原步骤与箭头文字；界面截图 → 转写可见的字段/按钮/数值；看不清的字标 `[?]`，绝不为顺滑而编造知识点。
+
+**第二层（兜底，仅在当前会话无视觉能力时用）：脚本 OCR**
+
+只有当当前会话模型**不支持视觉**（Read 图片返回 Unsupported）时，才降级用脚本 OCR 兜底：
 
 ```bash
 python3 src/wechat_images.py /tmp/wechat_article.md \
   --out /tmp/wechat_work --ocr --rewrite-out /tmp/wechat_article.local.md
 ```
 
-产物（`/tmp/wechat_work/`）：
-- `images/img_00.jpg ...` — 保序下载的图片（与文章出现顺序一致）
-- `ocr_raw.txt` — 逐张识别原始文本（默认 model 引擎 = 视觉模型 API 转写，结构还原最好；失败自动回退 macOS Vision → tesseract，保证不丢字）
-- `wechat_article.local.md` — 图片链接改写为 `images/img_XX.jpg` 本地路径的 md（下载失败的图保留原链接）
+- 多加 `--ocr` 会调用 `src/img_ocr.py`（model 引擎=视觉 API，需宿主提供 `ANTHROPIC_*`；失败自动回退 macOS Vision → tesseract）。产物多一个 `ocr_raw.txt`。
+- ⚠️ OCR 环境不一定具备（见上方说明），且 OCR 文本很脏（断行/切词/丢表格结构）——**只是不丢字的兜底对照物，绝不直接当结果交付**。
+- 用 OCR 兜底时：以识别文本为依据做清理还原，把必须看图确认的段落（手写、密集表格图）标注「⚠ 待视觉会话复核」，恢复视觉能力后再按第一层复核更正。
 
-**第二层：看图收尾（你，多模态模型，只有你来做才可靠）**
+**转写进正文**：在 `/tmp/wechat_article.local.md` 上编辑——每个内容性图片位置，用转写文字替换图片链接（表格图 → Markdown 表格），并在下方保留一行 `![img_XX.jpg](images/img_XX.jpg)` 供核对；装饰图直接移除。
 
-OCR 原始文本很脏（断行、切词、丢表格/箭头结构），**绝不能直接当结果交付**——它只是不丢字的兜底对照物：
-
-**看图前提**：本层需要当前会话模型支持视觉，当前会话模型已验证支持视觉（Read 图片正常）。若未来切换模型后 Read 图片返回 Unsupported，**降级执行**：以识别文本为唯一依据做清理与还原；把疑似识别退化、必须看图确认的段落（如手写、密集表格图）标注「⚠ 待视觉会话复核」，绝不编造内容。恢复视觉能力后按下方 1-4 复核。
-
-1. **清理噪点**：合并被切断的行、修被切开的词、纠正明显错字、去坐标噪声。
-2. **还原结构**：表格图还原成 Markdown 表格；跨行段落拼回整段；恢复 `→` 流程步骤；保留列表层级。
-3. **OCR 退化处直接看图**：排版密集、手写、艺术字体、表格/流程图，OCR 明显不可靠时用 Read 读 `images/img_XX.jpg`，以你的视觉为准更正。
-4. **交叉核对**：OCR 与你看图不一致时，结构类问题以视觉为准，纯字符串以 OCR 里明显正确的那份为准。
-
-**判断"图片是否有意义"**（视觉判断，别只看 OCR 是否出字）：
-- **无关图**：纯装饰背景/logo/二维码/表情包/风景，无有效文字 → 丢弃，不要转写。
-- **有效图**：表格图、幻灯片截图、笔记截图、带文字说明的图 → 保留并转写。
-
-**转写进正文**：在 `/tmp/wechat_article.local.md` 上编辑——每个内容性图片位置，用转写文字替换图片链接（表格图 → Markdown 表格），并在下方保留一行 `![img_XX.jpg](images/img_XX.jpg)` 供核对；装饰图直接移除。忠实图里内容，不要为了让文字顺滑而改写知识点。
-
-### 第 4 步：通读全文并人工检查
+### 第 3 步：通读全文并人工检查
 
 转写后必须完整读一遍，确认：
 - 结构完整（章节标题、段落是否齐全）
 - 图片转写内容与图一致（尤其表格图还原成表格后，行列没有错位）
 - 尾部噪音是否已清理
 
-### 第 5 步：落盘（遵循知识库文档体系）
+### 第 4 步：落盘（遵循知识库文档体系）
 
 ```text
 papers/NN-来源-主题/
@@ -119,7 +140,7 @@ papers/NN-来源-主题/
 ## 六、待深挖方向                   ← 勾选列表
 ```
 
-### 第 6 步：同步文档体系（三个文件）
+### 第 5 步：同步文档体系（三个文件）
 
 每次新增精读后必须同步，否则索引会过时：
 
@@ -127,7 +148,7 @@ papers/NN-来源-主题/
 2. `CLAUDE.md` — 第七节文档体系加新目录
 3. `notebook/0.knowledge-tree.md` — 相关节点加新连接（格式：`节点A ← → 节点B：连接说明`）
 
-### 第 7 步：向用户汇报
+### 第 6 步：向用户汇报
 
 ```text
 文章主题：<一句话>
@@ -149,6 +170,7 @@ papers/NN-来源-主题/
    images/ 并把转写文字并入 原文.md，不依赖远程链接
 7. qpic.cn 防盗链 → 下载要带浏览器 UA + Referer mp.weixin.qq.com
    （wechat_images.py 已处理，失败自动降级无 Referer 重试一次）
-8. OCR 输出绝不直接交付 → 断行/切词/丢表格结构是常态，必须由你（模型）
-   看图收尾：清理、还原、交叉核对，OCR 只是兜底对照物
+8. 图片识别主路径 = agent 用 Read 逐张看图（任何视觉 agent 自带，跨设备零配置）；
+   脚本 --ocr 只是无视觉会话时的兜底，且依赖宿主 ANTHROPIC_* / macOS 工具，不保证可用——
+   OCR 输出断行/切词/丢表格结构是常态，绝不直接交付
 ```

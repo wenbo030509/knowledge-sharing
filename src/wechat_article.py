@@ -12,7 +12,8 @@
   python3 wechat_article.py <url> -o output.md     # 指定输出文件（默认 文章标题.md）
   python3 wechat_article.py <url> --stdout         # 输出到标准输出
 
-依赖: requests, beautifulsoup4
+依赖: beautifulsoup4（HTML 解析，必需）；网络层用共享的 net_util（纯标准库，无需 requests）。
+      缺 bs4 时会给出明确的安装提示。
 """
 
 import argparse
@@ -20,7 +21,12 @@ import re
 import sys
 from pathlib import Path
 
-from bs4 import BeautifulSoup, Tag
+try:
+    from bs4 import BeautifulSoup, Tag
+except ImportError:
+    sys.exit("缺少依赖 beautifulsoup4，请先安装：python -m pip install beautifulsoup4")
+
+from net_util import get_text
 
 # 公众号页面底部/顶部噪音：以这些内容开头或包含的块会被剔除
 NOISE_PATTERNS = [
@@ -34,21 +40,11 @@ NOISE_PATTERNS = [
 
 
 def fetch_html(url: str) -> str:
-    """抓取微信文章 HTML。微信对无 UA 的请求可能返回验证页，需要浏览器 UA。"""
-    import requests
-
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        ),
+    """抓取微信文章 HTML。微信对无 UA 的请求可能返回验证页，net_util 已带浏览器 UA。"""
+    return get_text(url, headers={
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Accept-Language": "zh-CN,zh;q=0.9",
-    }
-    resp = requests.get(url, headers=headers, timeout=30)
-    resp.raise_for_status()
-    resp.encoding = "utf-8"
-    return resp.text
+    })
 
 
 def extract(html_str: str) -> tuple[str, str]:

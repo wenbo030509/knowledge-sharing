@@ -21,7 +21,7 @@ wechat_images.py — 微信文章图片下载 + OCR（wechat-article 技能用�
   ├── images/img_00.jpg ...   ← 下载的图片（与文章出现顺序一致）
   └── ocr_raw.txt             ← OCR 原始文本（--ocr 时）
 
-依赖: requests（与 wechat_article.py 相同）
+依赖: 无第三方（网络层用共享的 net_util，纯标准库）；--ocr 时才用到 img_ocr 及其配置。
 """
 
 import argparse
@@ -30,16 +30,9 @@ import re
 import sys
 from pathlib import Path
 
-from img_ocr import ocr_images
+from net_util import fetch_image
 
-UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
-      "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-# qpic.cn 防盗链: 带浏览器 UA + 微信 Referer 才能下到原图
-HEADERS = {
-    "User-Agent": UA,
-    "Referer": "https://mp.weixin.qq.com/",
-    "Accept": "image/avif,image/webp,image/apng,image/*,*/*;q=0.8",
-}
+from img_ocr import ocr_images
 
 IMG_RE = re.compile(r"!\[[^\]]*\]\(([^)]+)\)")
 
@@ -80,8 +73,6 @@ def _existing(img_dir: Path) -> dict[int, Path]:
 
 def download_images(urls: list[str], img_dir: Path) -> list[Path | None]:
     """保序下载；返回与 urls 等长的列表，失败项为 None（供改写时保留原链接）。"""
-    import requests
-
     img_dir.mkdir(parents=True, exist_ok=True)
     existing = _existing(img_dir)
     paths: list[Path | None] = []
@@ -90,13 +81,10 @@ def download_images(urls: list[str], img_dir: Path) -> list[Path | None]:
             paths.append(existing[i])
             continue
         try:
-            resp = requests.get(url, headers=HEADERS, timeout=30)
-            # qpic 防盗链偶尔要求无 Referer，失败时降级重试一次
-            if resp.status_code != 200:
-                resp = requests.get(url, headers={"User-Agent": UA}, timeout=30)
-            resp.raise_for_status()
-            fp = img_dir / f"img_{i:02d}{sniff_ext(resp.content)}"
-            fp.write_bytes(resp.content)
+            # qpic.cn 防盗链：net_util 带浏览器 UA + 微信 Referer，被拒时自动无 Referer 重试
+            content = fetch_image(url, referer="https://mp.weixin.qq.com/")
+            fp = img_dir / f"img_{i:02d}{sniff_ext(content)}"
+            fp.write_bytes(content)
             paths.append(fp)
         except Exception as e:  # noqa: BLE001
             print(f"[warn] 下载图片 {i} 失败: {e}", file=sys.stderr)

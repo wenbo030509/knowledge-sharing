@@ -16,36 +16,12 @@ import argparse
 import json
 import os
 import re
-import ssl
 import sys
-import urllib.request
 from datetime import datetime
 
+from net_util import fetch_image, get_text, resolve
+
 from img_ocr import ocr_images
-
-
-UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-      "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36")
-CTX = ssl.create_default_context()
-CTX.check_hostname = False
-CTX.verify_mode = ssl.CERT_NONE
-
-
-def http_get(url, binary=False):
-    req = urllib.request.Request(url, headers={
-        "User-Agent": UA,
-        "Referer": "https://www.xiaohongshu.com/",
-    })
-    with urllib.request.urlopen(req, context=CTX, timeout=40) as r:
-        data = r.read()
-    return data if binary else data.decode("utf-8", "replace")
-
-
-def resolve(url):
-    """跟随跳转拿最终 URL."""
-    req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, context=CTX, timeout=40) as r:
-        return r.geturl()
 
 
 def extract_state(html):
@@ -66,16 +42,21 @@ def grab_note(obj):
 
 
 def download_images(note, outdir):
-    os.makedirs(outdir, exist_ok=True)
+    # 图片统一放到 <outdir>/images/ 子目录（与 wechat_images.py 及 skill 文档一致）
+    img_dir = os.path.join(outdir, "images")
+    os.makedirs(img_dir, exist_ok=True)
     paths = []
+    ref = "https://www.xiaohongshu.com/"
     for i, im in enumerate(note.get("imageList") or []):
         url = im.get("urlDefault") or im.get("url")
         if not url:
             continue
         url = url.replace("http://", "https://")
-        fp = os.path.join(outdir, f"img_{i:02d}.jpg")
+        fp = os.path.join(img_dir, f"img_{i:02d}.jpg")
         try:
-            open(fp, "wb").write(http_get(url, binary=True))
+            # 小红书图片 CDN 自签证书链 → net_util 校验失败自动降级；带 Referer 过防盗链
+            with open(fp, "wb") as f:
+                f.write(fetch_image(url, referer=ref))
             paths.append(fp)
         except Exception as e:  # noqa: BLE001
             print(f"[warn] 下载图片 {i} 失败: {e}", file=sys.stderr)
@@ -93,7 +74,7 @@ def main():
 
     final = resolve(args.url)
     print("最终 URL:", final)
-    html = http_get(final)
+    html = get_text(final, referer="https://www.xiaohongshu.com/")
     obj = extract_state(html)
     note_id, note = grab_note(obj)
 
@@ -119,10 +100,10 @@ def main():
         "engine": args.ocr_engine if args.ocr else None,
         "fetched_at": datetime.now().isoformat(timespec="seconds"),
     }
-    with open(os.path.join(outdir, "note.json"), "w") as f:
+    with open(os.path.join(outdir, "note.json"), "w", encoding="utf-8") as f:
         json.dump(meta, f, ensure_ascii=False, indent=2)
     if ocr_text:
-        with open(os.path.join(outdir, "ocr_raw.txt"), "w") as f:
+        with open(os.path.join(outdir, "ocr_raw.txt"), "w", encoding="utf-8") as f:
             f.write(ocr_text)
 
     print("\n=== 帖子 ===")
