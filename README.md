@@ -152,17 +152,22 @@ knowledge-sharing/
 │       ├── 原文.md                    ← 正文 + 8 张卡片
 │       ├── 笔记.md                    ← 双层评测 + 选型三维 + 评测资产化
 │       └── images/                    ← 8 张原图
-│   └── 13.aliyun-agentloop-data-flywheel/  ← AgentLoop 数据飞轮实践 Part 1-4（共 5 篇，Part 5 待补）
-│       ├── 原文.md                    ← 四篇合并（含 39 张图片转写，图片按篇分目录）
-│       ├── 笔记.md                    ← 飞轮七环节 + 评估两层结构 + Rubric + 题目级 Rubric
-│       └── images/                    ← part1-part4 内容图 39 张（装饰图已剔除）
+│   └── 13.aliyun-agentloop-data-flywheel/  ← AgentLoop 数据飞轮实践（共 5 篇 · 已完结）
+│       ├── 原文.md                    ← 五篇合并（含 49 张图片转写，图片按篇分目录）
+│       ├── 笔记.md                    ← 飞轮七环节 + 评估两层结构 + Rubric + 经验注入五参数
+│       └── images/                    ← part1-part5 内容图（装饰图已剔除）
+│   └── 14.xiaohongshu-passk-data-selection/  ← 为什么 1T 模型 Agentic RL 不能用 pass@k 筛数据（小red同学）
+│       ├── 原文.md                    ← 正文 + 2 张核心信息图转写（pass@k 五缺陷 / 弱点驱动替代方案）
+│       ├── 笔记.md                    ← pass@k 五缺陷 + benchmark 缺口驱动定向构造
+│       └── images/                    ← 7 张内容图
 │
 └── src/                               ← 工具脚本
+    ├── net_util.py                    ← 跨平台 HTTP 层（纯标准库，无需 requests；wechat/xhs 共用）
     ├── html_to_md.py                  ← HTML 转 Markdown 工具（通用，需 <article>）
-    ├── wechat_article.py              ← 微信文章正文提取（curl 抓取 + js_content 解析）
-    ├── wechat_images.py               ← 微信文章图片下载 + 识别（qpic 保序下载 → img_ocr）
-    ├── xhs_fetch.py                   ← 小红书链接抓取（xiaohongshu-knowledge 技能用）
-    ├── img_ocr.py                     ← 共享图片识别模块（xiaohongshu/wechat 共用：视觉模型 API → Vision → tesseract 回退链）
+    ├── wechat_article.py              ← 微信文章正文提取（net_util 抓取 + js_content 解析）
+    ├── wechat_images.py               ← 微信文章图片保序下载（识图交给 agent；--ocr 兜底）
+    ├── xhs_fetch.py                   ← 小红书链接抓取 + 图片保序下载（xiaohongshu-knowledge 技能用）
+    ├── img_ocr.py                     ← 共享图片识别模块（无视觉会话兜底：视觉模型 API → Vision → tesseract）
     ├── img_ocr.swift                  ← 图片 OCR 引擎（macOS Vision，本地确定性兜底）
     └── build_resume_docx.py           ← 从 resume.md 生成 docx 简历（脚本内路径为旧 macOS 环境）
 ```
