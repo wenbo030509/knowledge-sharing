@@ -352,6 +352,7 @@ knowledge-sharing/
 │   ├── cot-compressed-evalset.md      ← CoT 质检项目（核心讲述故事，主线）
 │   ├── vlm-multivideo-capability-loop.md ← VLM 多视频理解能力提升（主线：Benchmark-driven 数据闭环 + 靶向 SFT，含设计/执行/消费/闭环四层）
 │   ├── vlm-sft-refactor.md            ← VLM 项目重构建议（能力提升重定位的原始论证，保留）
+│   ├── vlm-sft-addition.md            ← VLM 能力归因补充（指标→能力映射 + 基准口径澄清，已并入主文档 10.5-10.9，保留）
 │   ├── baidu-agent-migration.md       ← 百度物料迁移 Agent（历史项目）
 │   ├── fourth-paradigm-maas.md        ← 第四范式航空机务 MaaS（历史项目）
 │   ├── fourth-paradigm-multi-agents.md ← 第四范式军事 Multi-Agents（历史项目，暂不深入）

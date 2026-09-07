@@ -8,7 +8,7 @@
 >
 > 所属组织：AI 数据与安全 - 视觉理解与世界模型 - 基础模型标注组
 >
-> 本文档由原四份文档合并而来：`vlm-multivideo-data-production`（设计层）+ `vlm-annotation-delivery`（执行层）+ `vlm-sft-pipeline-review`（消费层）+ `vlm-eval-feedback-loop`（闭环工具）。合并的原因见 `vlm-sft-refactor.md`：**这四份讲的是同一件事，而且此前都把它讲浅了**——它不是"数据生产 Pipeline"，而是一次"模型诊断 → 靶向数据 → 质量控制 → SFT → 评测归因 → 下一轮策略"的完整能力提升项目。
+> 本文档由原四份文档合并而来：`vlm-multivideo-data-production`（设计层）+ `vlm-annotation-delivery`（执行层）+ `vlm-sft-pipeline-review`（消费层）+ `vlm-eval-feedback-loop`（闭环工具）。合并的原因见 `vlm-sft-refactor.md`：**这四份讲的是同一件事，而且此前都把它讲浅了**——它不是"数据生产 Pipeline"，而是一次"模型诊断 → 靶向数据 → 质量控制 → SFT → 评测归因 → 下一轮策略"的完整能力提升项目。此外，`vlm-sft-addition.md` 补充了更深一层的能力归因视角（指标 → 能力映射 + 基准口径澄清），已整合进第 10.5–10.9 节。
 
 ---
 
@@ -19,6 +19,7 @@
 - **真实结果**：内部评测 161 题，靶向数据覆盖 72 题（约 45%）；覆盖子集 **+2.8**，ClawEval 全量 **+0.5**，WildClaw **+2.3**。
 - **反直觉结论**：首轮实验最大的发现不是"数据有效"，而是"**数据有效，但覆盖不足**"——瓶颈是覆盖率，不是单条数据质量。下一轮资源应从"提质"转向"扩覆盖"。
 - **核心洞察**：**数据正确 ≠ 训练信号正确**。难度本身是训练信号的一部分（Difficulty Collapse），必须把"难度对齐"从质检后置项前移到采集 Gate。
+- **叙事最大短板（第 10.5–10.9 节）**：当前只有"指标"没有"指标 → 能力"的映射——`+0.5 / +2.3` 只能说明"模型整体变好"，证明不了"我构建的 L1/L2/L3 多视频能力变好"。需补一层"能力 Taxonomy → Benchmark 子集 → 数据覆盖 → Pre/Post Δ → OOD Δ"的能力归因层。且 ClawEval / WildClaw 很可能是**通用/真实世界 Agent 基准**（非纯视频理解），口径待核实。
 
 ---
 
@@ -541,6 +542,128 @@ SFT 的边界：只抬高正样本似然，不显式压低坏样本——不教"
 
 > 📌 待确认："补充拓展题目"的具体题量、与 ClawEval 161 题及 72 题覆盖口径的对应关系，以算法侧评测配置为准。
 
+### 10.5 更深一层：指标 → 能力的映射缺口（当前叙事最大的短板）
+
+> 来源：`vlm-sft-addition.md`。核心判断——**当前叙事最大的问题不是"指标不够"，而是"指标 → 能力"的映射没建立起来。**
+
+```text
+现状：+0.5 / +2.3 只能告诉读者"模型整体变好了"，
+     无法回答"到底是哪一种 VLM 能力变好了"——
+     是跨视频感知、跨视频对齐、时序理解、长视频理解，
+     还是 Agent 的工具调用能力？
+
+后果：能证明"模型整体能力发生了变化"，
+     不能证明"我构建的 L1/L2/L3 多视频能力发生了变化"。
+     ——这正是"不知道到底提升了什么"的根本原因。
+
+缺的那一层 = 能力归因层：
+Benchmark Question → Capability Label → Training Data Coverage
+→ Pre/Post Accuracy（→ 覆盖能力题 vs 未覆盖能力题的分别 Δ）
+```
+
+### 10.6 基准口径澄清：ClawEval / WildClaw 不是纯"视频理解"基准
+
+> ⚠️ 口径待与算法侧核实——`vlm-sft-addition.md` 依据公开 GitHub 资料给出如下判断，与"内部 161 题视频 VQA 集"的原表述存在冲突，需确认本项目引用的到底是内部同名评测集还是这两个公开基准。
+
+```text
+ClawEval（公开版，claw-eval/claw-eval）：
+├── 300 任务 / 9 类别 / 3 split，是"LLM as agents"评测 harness
+│   ├── General 161：communication/finance/ops/productivity 等 Agent 任务
+│   ├── Multimodal 101：网页生成 / Video QA / 文档理解
+│   └── Multi-turn 38：多轮交互 / 澄清 / 建议
+├── 能力口径：Completion（完成）/ Safety（安全）/ Robustness（稳定）
+└── 结论：ClawEval +0.5 ≠ VLM 视频理解 +0.5，
+    它代表"通用 / 多模态 Agent 任务完成能力"；只有 Multimodal split
+    里的 Video QA 与本项目直接相关。
+
+WildClawBench（InternLM/WildClawBench）：
+├── 定位：real-world, long-horizon agent evaluation（OpenClaw 环境）
+├── 任务例：足球视频剪精彩片段 / 多轮邮件协商 / 搜索结果找矛盾 /
+│   无文档代码库写推理脚本 / 隐私泄漏检查（单任务 10~60+ 次工具调用）
+└── 衡量的是"真实环境下长链路、多步骤、自主任务执行的 Agentic 能力"，
+    不是单纯"你看懂这个视频了吗"。
+
+三套基准的正确定位（不要都说成"衡量多视频能力"）：
+├── 内部 161 题：衡量目标多视频能力本身
+├── ClawEval：衡量能力向通用 Multimodal Agent 任务的迁移
+└── WildClawBench：衡量能力向真实世界长链路 Agent 任务的进一步泛化
+```
+
+### 10.7 四层指标结构（汇报时替代"三个裸数字"）
+
+> 说明：下方各能力维度的 Δ 为**示例数字（illustrative，非真实结果）**，用于展示归因结构；真实拆分待按 10.5 的映射补做。
+
+```text
+Layer 1 · Target Capability（我的数据到底训练了什么？）
+├── L1 Cross-video Perception   +X
+├── L2 Cross-video Comparison   +X
+└── L3 Cross-video Reasoning    +X
+
+Layer 2 · Target Benchmark（目标能力有没有真正提升？）
+├── Covered subset   +2.8（真实）
+├── Uncovered subset +X
+└── Overall          +X
+
+Layer 3 · General Multimodal（能力有没有迁移？）
+└── ClawEval Multimodal +X → 其中 Video QA +X
+   （不要只报 ClawEval Overall +0.5——finance/communication 等
+    与数据目标无关的能力会稀释掉真正相关的 Video QA 收益）
+
+Layer 4 · Real-world Agent（有没有迁移到真实复杂任务？）
+└── WildClawBench +2.3 → 拆 Multimodal perception / Long-horizon
+   reasoning / Tool orchestration / Planning
+   （若收益主要来自多模态感知 + 长链路推理、工具调用基本不变，
+    才叫"能力归因"，而非"分数归因"）
+
+示例（假设内部 161 题按能力拆分，非真实）：
+| 能力       | 题数 | SFT前 | SFT后 | Δ    |
+| L1 跨视频感知 | 40  | 65%  | 78%  | +13 |
+| L2 跨视频对比 | 55  | 48%  | 61%  | +13 |
+| L3 跨视频推理 | 66  | 32%  | 42%  | +10 |
+| Overall    | 161 | 46%  | 56%  | +10 |
+→ 能这样说才有说服力："靶向数据主要提升了跨视频状态对齐与
+  关系推理，L2 +13pp、L3 +10pp。"
+```
+
+### 10.8 "72 / 161" 需要重新解释
+
+```text
+现表述：161 题中靶向数据覆盖 72 题（45%）→ 全量被稀释到 +0.5
+问题：72/161=45% 只能说明"45% 的 benchmark case 有对应训练数据"，
+     不能直接推出"剩下 55% 没覆盖所以全量只有 +0.5"——中间缺
+     "能力标签 + 覆盖 → Pre/Post 分别 Δ"的证据链。
+
+要补的证据链：
+Benchmark Question → Capability Label → Training Data Coverage
+→ Pre/Post Accuracy
+得到：覆盖能力的题 +2.8 vs 未覆盖能力的题 +0.x
+才真正证明：数据覆盖 → 能力提升 → 全量收益被覆盖率限制。
+```
+
+### 10.9 数据质量 Gate → 能力覆盖矩阵（把三维评价升级为决策表）
+
+把第四节的"能力覆盖 × 难度覆盖 × 证据质量"进一步落成一张带收益的决策矩阵（数字为示例）：
+
+```text
+| 能力       | 数据覆盖 | 难度 | 证据质量 | SFT收益 | OOD收益 |
+| L1 跨视频感知 | 80%   | 高  | 95%   | +13   | +4    |
+| L2 跨视频对比 | 65%   | 高  | 93%   | +13   | +5    |
+| L3 跨视频推理 | 45%   | 中高 | 91%   | +10   | +3    |
+| 长视频理解    | 30%   | 高  | 90%   | +4    | +2    |
+| 时序推理     | 40%   | 高  | 92%   | +8    | +3    |
+
+据此做资源分配（不是所有数据都值得继续扩）：
+├── L1 覆盖 80% / 收益 +13 → 已较充分，不必再扩
+├── L2 覆盖 65% / 收益 +13 → 高价值，继续扩
+├── L3 覆盖 45% / 收益 +10 → 高价值，重点扩
+└── 长视频 覆盖 30% / 收益 +4 → 收益低，可能要重新设计数据难度/质量
+→ 从"普通数据生产项目"升级为 Benchmark-driven Data Engine。
+```
+
+**这一层补上后，项目叙事从**"我做了很多数据，模型涨了几个点"**升级为**"我发现模型在 L2/L3 跨视频对齐与推理上有明确缺口 → 构建对应难度数据 → SFT 后 L2 +X、L3 +Y → 未见数据上仍 +Z → 通用 Multimodal / Agent 基准上进一步 +X → 证明学到的是可迁移能力而非记忆 benchmark"。
+
+> 📌 落地待办（真实化 10.5–10.9）：① 给内部 benchmark 每题打能力标签；② 按标签 × 覆盖分别算 Pre/Post Δ；③ 确认 ClawEval/WildClaw 的真实身份与 split，拆出 Multimodal / Video QA 子项；④ 用真实数字替换本节示例。
+
 ---
 
 ## 十一、闭环层：评测反馈 → 数据策略（工作工具）
@@ -808,6 +931,23 @@ Q13：这套流程和你的质检工作什么关系？
 → 质检标准就是 SFT 正样本的质量定义：准确性拦标签噪声、完整性拦
    过程缺陷、格式拦格式漂移、匹配度拦语言捷径、难度对齐拦监督强度
    不足。交付层和消费层是同一套语言。
+
+Q14：+0.5 / +2.3 到底提升了哪种能力？（最容易被问倒，也最能体现深度）
+→ 这正是当前叙事的最大短板：只有"指标"没有"指标 → 能力"映射。裸
+   分数只能说明"模型整体变好"，证明不了"我构建的 L1/L2/L3 多视频能力
+   变好"。要补一层能力归因：给 benchmark 每题打能力标签 → 按标签 ×
+   数据覆盖分别算 Pre/Post Δ → 得到"覆盖能力题 +2.8 vs 未覆盖题 +0.x"，
+   才能说清是跨视频对齐（L2）、关系推理（L3）在涨，而非工具调用在涨。
+
+Q15：ClawEval / WildClaw 是视频理解基准吗？
+→ 更准确地说不是纯视频理解基准。ClawEval 是"LLM as agents"评测
+   harness（含 General / Multimodal / Multi-turn 三 split，Video QA 只在
+   Multimodal split 里），WildClawBench 是真实世界长链路 Agent 评测
+   （单任务 10~60+ 次工具调用）。所以三套基准应分层定位：内部 161 题
+   衡量目标多视频能力本身、ClawEval 衡量向通用多模态 Agent 任务的迁移、
+   WildClaw 衡量向真实世界 Agent 任务的进一步泛化。汇报应拆到 Multimodal
+   / Video QA 子项，别只报 Overall（会被无关能力稀释）。⚠️ 本项目引用的
+   到底是内部同名评测集还是这两个公开基准，口径待与算法核实。
 ```
 
 ---
@@ -841,6 +981,13 @@ Training Signal Quality Gate ← → CoT 质检 5 层 Gate（方法论复用）
 ├── 覆盖子集 vs 全量 vs 野外集 = 三层归因（学会/降智/泛化）
 └── ↔ cot-compressed-evalset.md 评测集设计方法论
 
+能力归因层（新节点 🌱，第 10.5–10.9）← → Benchmark-driven Data Engine
+├── 指标 → 能力映射：Capability Label → Coverage → Pre/Post Δ
+├── 四层指标：Target Capability / Target Benchmark / General
+│   Multimodal / Real-world Agent
+└── 基准分层定位：内部 161（能力本身）/ ClawEval（多模态 Agent 迁移）
+    / WildClaw（真实世界 Agent 泛化）
+
 数据治理 ← → Deduplication（视频去重）/ sample_id / 打码
 
 VLM 视频理解链路 ← → 抽帧 / ViT / 时序位置编码 / LLM 解码器
@@ -852,7 +999,8 @@ VLM 视频理解链路 ← → 抽帧 / ViT / 时序位置编码 / LLM 解码器
 
 ### 待深挖方向
 
-- [ ] **扩覆盖（最高优先级）**：优先补齐未覆盖 89 题中模型弱项，补充视频场景多样性；按稀释逻辑，全量收益会随覆盖率向 +2.8 收敛。
+- [ ] **补能力归因层（最高优先级，第 10.5–10.9）**：给内部 benchmark 每题打能力标签 → 按标签 × 覆盖分别算 Pre/Post Δ → 用真实数字替换 10.7–10.9 的示例，把"分数归因"升级为"能力归因"。
+- [ ] **扩覆盖**：优先补齐未覆盖 89 题中模型弱项，补充视频场景多样性；按稀释逻辑，全量收益会随覆盖率向 +2.8 收敛。
 - [ ] **难度坍缩自动化检测**：规则层（时长/分辨率/帧数/打码占比对比）→ VLM 层（难度对齐打分）→ 人工层校准。
 - [ ] **为偏好优化备料**：轨迹对比阶段的模型错答天然是 DPO 的 rejected 候选（人工 response 作为 chosen），近零标注成本构造偏好对。
 - [ ] **为可验证奖励打基础**：答案规范化（短答案、可抽取、格式统一）让规则验证器直接打分，是数据侧可提前配合 GRPO 的点。
@@ -862,6 +1010,8 @@ VLM 视频理解链路 ← → 抽帧 / ViT / 时序位置编码 / LLM 解码器
 ### 待确认清单（向算法核实）
 
 ```text
+□ ClawEval / WildClaw 的真实身份：是内部同名评测集，还是公开
+  claw-eval / WildClawBench？各自 split 构成与 Video QA 子项口径
 □ "补充拓展题目"的题量、与 ClawEval 161 题 / 72 题覆盖口径的对应关系
 □ Rollout 具体配置：采样条数、筛选阈值、教师模型选择
 □ 轨迹对比的错误归类口径与具体脚本实现
@@ -872,4 +1022,4 @@ VLM 视频理解链路 ← → 抽帧 / ViT / 时序位置编码 / LLM 解码器
 
 ---
 
-**最后更新：2026-09-07**（四份文档合并为一份：按 `vlm-sft-refactor.md` 的深度与难度，重定位为"能力提升 + Benchmark-driven 数据闭环 + 靶向 SFT"，缝合设计层/执行层/消费层/闭环层四层叙事）
+**最后更新：2026-09-07**（四份文档合并为一份：按 `vlm-sft-refactor.md` 的深度与难度，重定位为"能力提升 + Benchmark-driven 数据闭环 + 靶向 SFT"，缝合设计层/执行层/消费层/闭环层四层叙事；并整合 `vlm-sft-addition.md` 的能力归因层——第 10.5–10.9 节新增"指标 → 能力映射 / 基准口径澄清 / 四层指标结构 / 72-161 重解释 / 能力覆盖矩阵"，追加 Q14–Q15 追问）

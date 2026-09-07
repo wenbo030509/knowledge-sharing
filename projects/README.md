@@ -2,7 +2,7 @@
 
 > 按项目独立记录，持续填充。每个项目一个文件，记录背景、技术解剖、知识连接、面试故事。
 >
-> 更新：2026-09-07（四份 VLM 文档合并为 `vlm-multivideo-capability-loop.md`，按能力提升定位重构；保留 `vlm-sft-refactor.md` 论证文档）
+> 更新：2026-09-07（四份 VLM 文档合并为 `vlm-multivideo-capability-loop.md`，按能力提升定位重构；保留 `vlm-sft-refactor.md` 与 `vlm-sft-addition.md` 论证文档，后者的能力归因层已并入主文档 10.5-10.9）
 
 ---
 
@@ -13,6 +13,7 @@
 | 字节 · CoT 质检 Pipeline | `cot-compressed-evalset.md` | 🟢 已交付，持续深挖 | 2026-06 ~ 07 | 实习经历 · 字节 ① |
 | 字节 · VLM 多视频理解能力提升（数据闭环 + 靶向 SFT） | `vlm-multivideo-capability-loop.md` | 🟢 进行中（首轮闭环已跑通） | 2026-08 ~ | 实习经历 · 字节 ② |
 | 字节 · VLM 项目重构建议（能力提升重定位论证） | `vlm-sft-refactor.md` | 📋 论证文档（保留） | 2026-09 | 实习经历 · 字节 ② |
+| 字节 · VLM 能力归因补充（指标→能力映射） | `vlm-sft-addition.md` | 📋 论证文档（已并入主文档 10.5-10.9，保留） | 2026-09 | 实习经历 · 字节 ② |
 | 百度 · 一键百看投放 Agent | `baidu-agent-migration.md` | 🟡 历史项目，故事可用 | 2025.08 ~ 2026.04 | 实习经历 · 百度 |
 | 第四范式 · 航空机务 MaaS | `fourth-paradigm-maas.md` | 🟡 历史项目，故事可用 | 2024.10 ~ 2025.02 | 实习经历 · 第四范式 |
 | 第四范式 · 军事 Multi-Agents（Manus 方向） | `fourth-paradigm-multi-agents.md` | 🟡 历史项目，暂不深入 | 2025.03 ~ 2025.08 | 实习经历 · 第四范式 |
