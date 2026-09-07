@@ -4,7 +4,7 @@
 > 「策略 PM 的工作驱动是什么？怎么发现改进点？idea 从哪来？怎么落实？数据构造和合成是什么？」
 >
 > 本文把散落在 `notebook/算法反馈迭代`、`notebook/AI 数据策略`、`notebook/AI策略产品与评测能力地图`、
-> `projects/vlm-sft-pipeline-review` 里的碎片，串成一条完整闭环，并重点补齐**数据构造 vs 数据合成**这块空白。
+> `projects/vlm-multivideo-capability-loop` 里的碎片，串成一条完整闭环，并重点补齐**数据构造 vs 数据合成**这块空白。
 
 ---
 
@@ -33,12 +33,12 @@
 
 | 闭环环节 | 已有沉淀 |
 |----------|----------|
-| ① 驱动 / 能力边界探测 | 第七节 + `vlm-annotation-delivery`（难度坍缩）+ WildClaw 野外集 |
-| ② 归因方法论 | `notebook/算法反馈迭代`（四类根因）+ `vlm-sft-pipeline-review` 8.4（三层归因）|
+| ① 驱动 / 能力边界探测 | 第七节 + `vlm-multivideo-capability-loop` 六节（难度坍缩）+ WildClaw 野外集 |
+| ② 归因方法论 | `notebook/算法反馈迭代`（四类根因）+ `vlm-multivideo-capability-loop` 十节（三层归因）|
 | ③ 数据策略响应 | `notebook/AI 数据策略`（数据策略五问 + 消费路径分流）|
-| ④ 落实执行 | `vlm-sft-pipeline-review`（靶向 SFT 三步闭环，具体实例）|
+| ④ 落实执行 | `vlm-multivideo-capability-loop`（靶向 SFT 三步闭环，具体实例）|
 | ⑤ 验证 | 单变量 + before/after 对照 + 护栏指标（防难度坍缩）|
-| 探索→放量二阶段 | 第八节 + `vlm-sft`（小批 +2.8）+ `baidu` 3.4（渐进式投资）|
+| 探索→放量二阶段 | 第八节 + `vlm-multivideo-capability-loop`（小批 +2.8）+ `baidu` 3.4（渐进式投资）|
 
 ---
 
@@ -86,7 +86,7 @@
 维度化评测（不是单一通过率）→ 哪个能力维度分最低
     ↓
 错误地图（error map）→ base 模型跑全量，聚合错误分布
-    （↔ vlm-sft-pipeline-review 主题1：轨迹对比）
+    （↔ vlm-multivideo-capability-loop 第八节：模型轨迹对比）
     ↓
 错误环节分层 → 错在感知层 / 推理层 / 格式层？（这一步决定动作方向）
     ├── 感知层错 → 加视觉/证据类数据
@@ -192,7 +192,7 @@ idea
 ### 具体实例：靶向 SFT 三步闭环（我亲历的落地样本）
 
 ```text
-（↔ projects/vlm-sft-pipeline-review）
+（↔ projects/vlm-multivideo-capability-loop 第七~十节）
 ① 轨迹对比（诊断）→ base 模型跑全量，定位错题 = 错误地图
 ② 行为引导 Rollout（造数）→ 拒绝采样合成正样本
 ③ SFT（模仿）→ loss mask + teacher forcing
@@ -242,7 +242,7 @@ idea
    │   （Alpaca / WizardLM）
    ├── 蒸馏（Distillation）：强/教师模型生成答案/CoT/偏好训小模型
    ├── 拒绝采样 / RFT / STaR：自采样多条 + 筛选正确的进训练集
-   │   （★我做过：行为引导 Rollout = 这个，vlm-sft-pipeline-review 第六节）
+   │   （★我做过：行为引导 Rollout = 这个，vlm-multivideo-capability-loop 第九节）
    └── 反向构造（back-translation）：从答案反推问题（从代码反推需求）
 
 ② 程序 / 规则合成（Programmatic）
@@ -428,7 +428,7 @@ Phi 系列（"Textbooks Are All You Need"）：高质量合成数据训小模型
 ```text
 ① 非线性放大：小批 +2.8 ≠ 大批线性涨
    └── ★活案例就是你自己：VLM 靶向 SFT 覆盖子集 +2.8，
-       全量被 89 题未覆盖稀释到 +0.5（vlm-sft-pipeline-review 8.4）
+       全量被 89 题未覆盖稀释到 +0.5（vlm-multivideo-capability-loop 第十节）
    └── 放量收益随覆盖率向子集收益收敛——瓶颈是覆盖率不是质量
 ② 小批过拟合：小批可能过拟合到特定分布，放量才暴露泛化问题
    └── 对策：小批阶段就用 held-out / 野外集验证泛化（WildClaw +2.3 的意义）
@@ -611,9 +611,9 @@ PM 的四个主动杠杆：
 ```text
 AI 数据策略 PM 工作闭环（本文）
 ├── ← → 评测驱动：gap 的仪器 = 评测（起点+终点）
-├── ← → 归因方法论（notebook/算法反馈迭代 四类根因 + vlm-sft 三层归因）
+├── ← → 归因方法论（notebook/算法反馈迭代 四类根因 + vlm-multivideo-capability-loop 三层归因）
 ├── ← → 数据策略五问 + 消费路径分流（notebook/AI 数据策略）
-├── ← → 靶向 SFT 三步闭环（vlm-sft-pipeline-review：执行实例）
+├── ← → 靶向 SFT 三步闭环（vlm-multivideo-capability-loop：执行实例）
 └── ← → Research Taste / 蒸馏 loop 陷阱（papers/08 + 09：idea 来源）
 
 数据构造 vs 数据合成（新节点 🌿，升级 Synthetic Data 🌱）
@@ -621,7 +621,7 @@ AI 数据策略 PM 工作闭环（本文）
 ├── 合成四谱系：模型 / 程序规则 / 仿真渲染 / 环境交互
 ├── 合成命门 = verifier（↔ 拒绝采样筛选 = 质检 Gate；↔ LLM Judge 可靠性）
 ├── 合成五风险：幻觉 / 分布失真 / 模型坍缩 / 多样性不足 / 反捷径泄漏
-├── ← → 拒绝采样（行为引导 Rollout，vlm-sft 第六节）
+├── ← → 拒绝采样（行为引导 Rollout，vlm-multivideo-capability-loop 第九节）
 ├── ← → SWE-smith 程序化 bug 合成（papers/06）
 ├── ← → 数据质量+规模可换参数量（papers/06：32B+5k 打败 235B）
 └── ← → gap-analysis D2/D3（蒸馏 + 渲染/扩散合成 = 待补实操）

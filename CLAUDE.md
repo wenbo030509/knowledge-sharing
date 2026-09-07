@@ -350,10 +350,8 @@ knowledge-sharing/
 ├── projects/                          ← 按项目独立记录（状态见项目索引）
 │   ├── README.md                      ← 项目索引（含状态标记）
 │   ├── cot-compressed-evalset.md      ← CoT 质检项目（核心讲述故事，主线）
-│   ├── vlm-multivideo-data-production.md ← VLM 多视频数据生产（主线，设计层：标准拆解/L1/L2/L3/自动化）
-│   ├── vlm-annotation-delivery.md     ← VLM 数据生产（执行层：寻源采集 + 质检 + 交付，端到端负责）
-│   ├── vlm-sft-pipeline-review.md     ← VLM 靶向 SFT 管线复盘（消费层：数据如何转化为模型提升）
-│   ├── vlm-eval-feedback-loop.md      ← VLM 评测反馈闭环（工作工具：归因模板 + 策略反馈框架 + 验证记录表）
+│   ├── vlm-multivideo-capability-loop.md ← VLM 多视频理解能力提升（主线：Benchmark-driven 数据闭环 + 靶向 SFT，含设计/执行/消费/闭环四层）
+│   ├── vlm-sft-refactor.md            ← VLM 项目重构建议（能力提升重定位的原始论证，保留）
 │   ├── baidu-agent-migration.md       ← 百度物料迁移 Agent（历史项目）
 │   ├── fourth-paradigm-maas.md        ← 第四范式航空机务 MaaS（历史项目）
 │   ├── fourth-paradigm-multi-agents.md ← 第四范式军事 Multi-Agents（历史项目，暂不深入）
