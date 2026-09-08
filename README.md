@@ -92,10 +92,11 @@ knowledge-sharing/
 │
 ├── projects/                          ← 按项目独立记录
 │   ├── README.md                      ← 项目索引
-│   ├── cot-compressed-evalset.md       ← CoT 质检项目（核心讲述故事）
-│   ├── vlm-multivideo-capability-loop.md ← VLM 多视频理解能力提升（主线：数据闭环 + 靶向 SFT）
-│   ├── vlm-sft-refactor.md             ← VLM 项目重构建议（能力提升重定位论证，保留）
-│   ├── vlm-sft-addition.md             ← VLM 能力归因补充（指标→能力映射，已并入主文档，保留）
+│   ├── bytedance-cot-compressed-evalset.md       ← 业务·evalset 构造：CoT 学科长尾+推理（核心讲述故事）
+│   ├── bytedance-vlm-agent能力建设.md             ← 业务·训练数据构造：vlm-agent 纲要（Agent 基准低→靶向增强）
+│   ├── bytedance-vlm-multivideo-capability-loop.md ← 业务·训练数据构造：vlm-agent 详版（已跑通 Benchmark 闭环，以视觉理解为杠杆）
+│   ├── bytedance-长视频复杂推理能力建设.md         ← 业务·训练数据构造：长视频复杂推理纲要（独立项目）
+│   ├── bytedance-数据构造pipeline.md             ← 开发：数据构造 Pipeline（半自动 DAG）
 │   ├── baidu-agent-migration.md        ← 百度物料迁移 Agent
 │   ├── fourth-paradigm-maas.md         ← 第四范式航空机务 MaaS
 │   ├── fourth-paradigm-multi-agents.md ← 第四范式军事 Multi-Agents
